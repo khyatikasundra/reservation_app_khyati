@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reservation_app/function/validation_function.dart';
 import 'package:reservation_app/strings/ui_string.dart';
 import 'package:reservation_app/view/home/screen/home_page.dart';
+import 'package:reservation_app/view/home/widget/custom_bottom_navigation_bar.dart';
 import 'package:reservation_app/view/sign_in/bloc/sign_in_bloc.dart';
 import 'package:reservation_app/view/sign_in/widget/custom_text_field.dart';
 
