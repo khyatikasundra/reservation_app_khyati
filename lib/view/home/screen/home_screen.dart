@@ -8,7 +8,7 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
-
+//https://stackoverflow.com/questions/61808268/how-to-hide-bottom-navigation-bar-on-new-screen-in-flutter
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedTab = 0;
   final List _pages = [
