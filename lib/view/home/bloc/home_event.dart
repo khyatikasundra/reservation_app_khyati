@@ -6,3 +6,12 @@ sealed class HomeEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class GetHomeInitialData extends HomeEvent {}
+
+class GetRecommendedCardSelected extends HomeEvent {
+  final int hotelId;
+  const GetRecommendedCardSelected({required this.hotelId});
+  @override
+  List<Object> get props => [hotelId];
+}

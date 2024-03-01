@@ -1,65 +1,128 @@
 import 'package:flutter/material.dart';
-import 'package:reservation_app/view/home/widget/custom_bottom_navigation_bar.dart';
-import 'package:reservation_app/view/promo/screen/promo_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:reservation_app/model/rest_model.dart';
+import 'package:reservation_app/strings/ui_string.dart';
+import 'package:reservation_app/view/detail/screen/detail_page.dart';
+import 'package:reservation_app/view/home/bloc/home_bloc.dart';
+import 'package:reservation_app/view/home/widget/popular_section_card.dart';
+import 'package:reservation_app/view/home/widget/recommended_section_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
-//https://stackoverflow.com/questions/61808268/how-to-hide-bottom-navigation-bar-on-new-screen-in-flutter
+
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedTab = 0;
-  final List _pages = [
-    const Center(
-      child: Text("Home"),
-    ),
-    const Center(
-      child: Text("About"),
-    ),
-    const PromoPage(),
-    const Center(
-      child: Text("Contact"),
-    ),
-  ];
-  _changeTab(int index) {
-    setState(() {
-      _selectedTab = index;
-    });
+  late HomeBloc _homeBloc;
+  List<RestModel> _recommendedHotelList = [];
+  @override
+  void initState() {
+    _homeBloc = context.read<HomeBloc>();
+    _homeBloc.add(GetHomeInitialData());
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedTab,
-          onTap: (index) => _changeTab(index),
-          selectedItemColor: Colors.red,
-          unselectedItemColor: Colors.grey,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.notifications), label: "notifications"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.card_giftcard), label: "card gift"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person_2), label: "person"),
-          ]),
-      body: _pages[_selectedTab],
+      body: BlocConsumer<HomeBloc, HomeState>(
+        listener: (context, state) {
+          if (state is OnGetHomeInitialDataSuccessful) {
+            _recommendedHotelList = state.recommendedList;
+          }
+          if (state is OnGetRecommendedItemSelected) {
+            Navigator.pushNamed(context, DetailPage.tag,
+                arguments: state.selectedHotelId);
+          }
+        },
+        builder: (context, state) {
+          return SafeArea(
+            child: CustomScrollView(
+              slivers: [
+                _topBalanceContainer(context),
+                SliverList.builder(
+                    itemCount: hotelList.length,
+                    itemBuilder: (context, index) =>
+                        PopularSectionCard(popularItem: hotelList[index]))
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  SliverToBoxAdapter _topBalanceContainer(BuildContext context) =>
+      SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 200,
+              child: Stack(
+                  children: [_backgroundContainer(), _balanceCard(context)]),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                UiString.stringAsset.kRecommendedPlace,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+            ),
+            SizedBox(
+              height: 240,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _recommendedHotelList.length,
+                  itemBuilder: (context, index) => RecommendedSectionCard(
+                        recommendedItem: _recommendedHotelList[index],
+                        onPress: () {
+                          _homeBloc.add(GetRecommendedCardSelected(
+                              hotelId: _recommendedHotelList[index].id));
+                        },
+                      )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                UiString.stringAsset.kPopularPlaces,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+            )
+          ],
+        ),
+      );
+
+  Container _backgroundContainer() => Container(
+        margin: const EdgeInsets.only(bottom: 50),
+        color: Colors.red,
+      );
+
+  Positioned _balanceCard(BuildContext context) => Positioned(
+        top: 100,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: _card(),
+        ),
+      );
+
+  Padding _card() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Card(
+        elevation: 12,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(UiString.stringAsset.kYourCardBalance),
+              Text(UiString.stringAsset.kIDR125),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
-
-Widget _bottomNavigation() => Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.home)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.card_giftcard)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.person_outline)),
-        ],
-      ),
-    );

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reservation_app/function/validation_function.dart';
 import 'package:reservation_app/strings/ui_string.dart';
-import 'package:reservation_app/view/home/screen/home_page.dart';
-import 'package:reservation_app/view/home/widget/custom_bottom_navigation_bar.dart';
+import 'package:reservation_app/view/landing/screen/landing_page.dart';
 import 'package:reservation_app/view/sign_in/bloc/sign_in_bloc.dart';
 import 'package:reservation_app/view/sign_in/widget/custom_text_field.dart';
 
@@ -62,8 +61,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   void _listener(SignInState state, BuildContext context) async {
     if (state is OnSignUpSuccessfulState) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+      Navigator.pushReplacementNamed(context, LandingPage.tag);
     }
   }
 
@@ -106,11 +104,18 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Widget _loginButton(SignInState state) => Center(
         child: ElevatedButton(
+            style: ButtonStyle(
+                elevation: MaterialStateProperty.all(5),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)))),
             onPressed: () {
               _validation();
             },
             child: state is SignInLoader
                 ? const CircularProgressIndicator()
-                : Text(UiString.stringAsset.loginButtonText)),
+                : Text(
+                    UiString.stringAsset.loginButtonText,
+                    style: Theme.of(context).textTheme.displayLarge,
+                  )),
       );
 }
