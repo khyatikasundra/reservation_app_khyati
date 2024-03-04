@@ -15,6 +15,15 @@ class StringAsset {
 
   //Detail Screen
   final String kDetailPlace = "Detail Place";
+  final String kAbout = "About";
+  final String kMenu = "Menu";
+  final String kReview = "Review";
+  final String kFoodMenu = "Food Menu";
+  final String kBeverageMenu = "Beverage Menu";
+  final String kIDR = "IDR \t";
+  final String kReservation = "Reservation";
+  final String kOrder = "Order";
+  final String kAdd = "Add";
 
   //hotel and location name
   final String kFLavorJunction = "Flavor Junction";
