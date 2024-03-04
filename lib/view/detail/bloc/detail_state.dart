@@ -16,15 +16,10 @@ class OnGetDetailPageInitialData extends DetailState {
 
 class OnGetAddRemoveItemState extends DetailState {
   final List<FoodMenuModel> updatedFoodCount;
-  final List<BeverageMenuModel> updatedBeverageCount;
+  final List<FoodMenuModel> updatedBeverageCount;
   const OnGetAddRemoveItemState(
-      {
-      required this.updatedFoodCount,
-      required this.updatedBeverageCount});
+      {required this.updatedFoodCount, required this.updatedBeverageCount});
   @override
-  List<Object> get props => [
-        updatedBeverageCount,
-        updatedFoodCount,
-        identityHashCode(this)
-      ];
+  List<Object> get props =>
+      [updatedBeverageCount, updatedFoodCount, identityHashCode(this)];
 }

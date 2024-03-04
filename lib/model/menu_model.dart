@@ -4,64 +4,64 @@ import 'package:reservation_app/strings/ui_string.dart';
 
 class MenuModel {
   final List<FoodMenuModel> food;
-  final List<BeverageMenuModel> drink;
+  final List<FoodMenuModel> drink;
 
   MenuModel({required this.food, required this.drink});
 }
 
 class FoodMenuModel {
   final String id;
-  final String dishName;
-  final int dishPrice;
+  final String menuName;
+  final int menuPrice;
   int count;
   FoodMenuModel(
       {required this.id,
-      required this.dishName,
-      required this.dishPrice,
+      required this.menuName,
+      required this.menuPrice,
       this.count = 0});
 }
 
 List<FoodMenuModel> foodList = [
   FoodMenuModel(
-      dishName: UiString.stringAsset.kFireCrackerChickenTenders,
-      dishPrice: 35,
+      menuName: UiString.stringAsset.kFireCrackerChickenTenders,
+      menuPrice: 35,
       id: "F1"),
   FoodMenuModel(
-      dishName: UiString.stringAsset.kChilliPepperCheeseFries,
-      dishPrice: 35,
+      menuName: UiString.stringAsset.kChilliPepperCheeseFries,
+      menuPrice: 35,
       id: "F2"),
   FoodMenuModel(
-      dishName: UiString.stringAsset.kFlamingHotWings, dishPrice: 30, id: "F3"),
+      menuName: UiString.stringAsset.kFlamingHotWings, menuPrice: 30, id: "F3"),
   FoodMenuModel(
-      dishName: UiString.stringAsset.kSpicyThaiBasilChicken,
-      dishPrice: 45,
+      menuName: UiString.stringAsset.kSpicyThaiBasilChicken,
+      menuPrice: 45,
       id: "F4")
 ];
 
-class BeverageMenuModel {
-  final String id;
-  final String drinkName;
-  final int drinkPrice;
-  int count;
-  BeverageMenuModel(
-      {required this.drinkName,
-      required this.drinkPrice,
-      required this.id,
-      this.count = 0});
-}
+// class BeverageMenuModel {
+//   final String id;
+//   final String drinkName;
+//   final int drinkPrice;
+//   int count;
+//   BeverageMenuModel(
+//       {required this.drinkName,
+//       required this.drinkPrice,
+//       required this.id,
+//       this.count = 0});
+// }
 
-List<BeverageMenuModel> drinkList = [
-  BeverageMenuModel(
-      drinkName: UiString.stringAsset.kSpicedGuavaRefresher,
-      drinkPrice: 20,
+List<FoodMenuModel> drinkList = [
+  FoodMenuModel(
+      menuName: UiString.stringAsset.kSpicedGuavaRefresher,
+      menuPrice: 20,
       id: "B1"),
-  BeverageMenuModel(
-      drinkName: UiString.stringAsset.kSzechuanSpickenIcedTea,
-      drinkPrice: 25,
+  FoodMenuModel(
+      menuName: UiString.stringAsset.kSzechuanSpickenIcedTea,
+      menuPrice: 25,
       id: "B2"),
-  BeverageMenuModel(
-      drinkName: UiString.stringAsset.kJalapenoMintJulep,
-      drinkPrice: 30,
+  FoodMenuModel(
+      menuName: UiString.stringAsset.kJalapenoMintJulep,
+      menuPrice: 30,
       id: "B3")
 ];
 

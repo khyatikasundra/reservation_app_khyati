@@ -45,7 +45,8 @@ List<RestModel> hotelList = [
       menu: MenuModel(food: foodList, drink: drinkList),
       review: reviewList,
       images: images,
-      hotelAddress: UiString.stringAsset.kFLavorJunctionAddress, hotelReservationPrice: 120),
+      hotelAddress: UiString.stringAsset.kFLavorJunctionAddress,
+      hotelReservationPrice: 120),
   RestModel(
       id: 2,
       hotelName: UiString.stringAsset.kRootenineCafe,
@@ -58,7 +59,8 @@ List<RestModel> hotelList = [
       menu: MenuModel(food: foodList, drink: drinkList),
       review: reviewList,
       images: images,
-      hotelAddress: UiString.stringAsset.kRootenineCafeAddress, hotelReservationPrice: 130),
+      hotelAddress: UiString.stringAsset.kRootenineCafeAddress,
+      hotelReservationPrice: 130),
   RestModel(
       id: 3,
       hotelName: UiString.stringAsset.kMitsuiHotel,
@@ -71,7 +73,8 @@ List<RestModel> hotelList = [
       menu: MenuModel(food: foodList, drink: drinkList),
       review: reviewList,
       images: images,
-      hotelAddress: UiString.stringAsset.kMitsuiHotelAddress, hotelReservationPrice: 110),
+      hotelAddress: UiString.stringAsset.kMitsuiHotelAddress,
+      hotelReservationPrice: 110),
   RestModel(
       id: 4,
       hotelName: UiString.stringAsset.kGoldenResort,
@@ -84,7 +87,8 @@ List<RestModel> hotelList = [
       menu: MenuModel(food: foodList, drink: drinkList),
       review: reviewList,
       images: images,
-      hotelAddress: UiString.stringAsset.kGoldenResortAddress, hotelReservationPrice: 150),
+      hotelAddress: UiString.stringAsset.kGoldenResortAddress,
+      hotelReservationPrice: 150),
   RestModel(
       id: 5,
       hotelName: UiString.stringAsset.kMysticHotel,
@@ -97,5 +101,6 @@ List<RestModel> hotelList = [
       menu: MenuModel(food: foodList, drink: drinkList),
       review: reviewList,
       images: images,
-      hotelAddress: UiString.stringAsset.kMysticHotelAddress, hotelReservationPrice: 160),
+      hotelAddress: UiString.stringAsset.kMysticHotelAddress,
+      hotelReservationPrice: 160),
 ];

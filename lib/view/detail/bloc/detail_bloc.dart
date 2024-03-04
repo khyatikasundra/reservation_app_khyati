@@ -10,7 +10,7 @@ part 'detail_state.dart';
 
 class DetailBloc extends Bloc<DetailEvent, DetailState> {
   List<FoodMenuModel> _foodList = [];
-  List<BeverageMenuModel> _drinkList = [];
+  List<FoodMenuModel> _drinkList = [];
 
   late RestModel _hotel;
   DetailBloc() : super(DetailInitial()) {
@@ -68,6 +68,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
 
         break;
     }
-    emit(OnGetAddRemoveItemState(updatedFoodCount: _foodList, updatedBeverageCount: _drinkList));
+    emit(OnGetAddRemoveItemState(
+        updatedFoodCount: _foodList, updatedBeverageCount: _drinkList));
   }
 }

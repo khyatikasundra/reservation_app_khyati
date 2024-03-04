@@ -26,7 +26,7 @@ class _DetailScreenState extends State<DetailScreen> {
   String _selectedFoodId = "";
   final String _orderButtonText = UiString.stringAsset.kReservation;
   List<FoodMenuModel> _foodList = [];
-  List<BeverageMenuModel> _beverageList = [];
+  List<FoodMenuModel> _beverageList = [];
 
   RestModel _hotelDetail = RestModel(
       id: 5,
