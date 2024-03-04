@@ -9,6 +9,7 @@ class RestModel {
   final String hotelName;
   final String location;
   final String imageURL;
+  final String hotelAddress;
   final String description;
   final int rating;
   final AboutModel about;
@@ -21,6 +22,7 @@ class RestModel {
       required this.location,
       required this.description,
       required this.imageURL,
+      required this.hotelAddress,
       required this.rating,
       required this.about,
       required this.menu,
@@ -40,7 +42,8 @@ List<RestModel> hotelList = [
       about: AboutModel(description: UiString.stringAsset.kloremIpsum),
       menu: MenuModel(food: foodList, drink: drinkList),
       review: reviewList,
-      images: images),
+      images: images,
+      hotelAddress: UiString.stringAsset.kFLavorJunctionAddress),
   RestModel(
       id: 2,
       hotelName: UiString.stringAsset.kRootenineCafe,
@@ -52,7 +55,8 @@ List<RestModel> hotelList = [
       about: AboutModel(description: UiString.stringAsset.kloremIpsum),
       menu: MenuModel(food: foodList, drink: drinkList),
       review: reviewList,
-      images: images),
+      images: images,
+      hotelAddress: UiString.stringAsset.kRootenineCafeAddress),
   RestModel(
       id: 3,
       hotelName: UiString.stringAsset.kMitsuiHotel,
@@ -64,7 +68,8 @@ List<RestModel> hotelList = [
       about: AboutModel(description: UiString.stringAsset.kloremIpsum),
       menu: MenuModel(food: foodList, drink: drinkList),
       review: reviewList,
-      images: images),
+      images: images,
+      hotelAddress: UiString.stringAsset.kMitsuiHotelAddress),
   RestModel(
       id: 4,
       hotelName: UiString.stringAsset.kGoldenResort,
@@ -76,7 +81,8 @@ List<RestModel> hotelList = [
       about: AboutModel(description: UiString.stringAsset.kloremIpsum),
       menu: MenuModel(food: foodList, drink: drinkList),
       review: reviewList,
-      images: images),
+      images: images,
+      hotelAddress: UiString.stringAsset.kGoldenResortAddress),
   RestModel(
       id: 5,
       hotelName: UiString.stringAsset.kMysticHotel,
@@ -84,9 +90,10 @@ List<RestModel> hotelList = [
       imageURL:
           "https://i.pinimg.com/564x/52/eb/bb/52ebbb41ad6bd5bee8f889e2fbd6ef19.jpg",
       description: UiString.stringAsset.kloremIpsum,
-      rating: 3,
+      rating: 5,
       about: AboutModel(description: UiString.stringAsset.kloremIpsum),
       menu: MenuModel(food: foodList, drink: drinkList),
       review: reviewList,
-      images: images),
+      images: images,
+      hotelAddress: UiString.stringAsset.kMysticHotelAddress),
 ];

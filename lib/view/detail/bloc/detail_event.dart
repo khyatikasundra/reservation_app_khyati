@@ -8,6 +8,6 @@ sealed class DetailEvent extends Equatable {
 }
 
 class GetDetailPageInitialData extends DetailEvent {
-  final String hotelId;
+  final int hotelId;
   const GetDetailPageInitialData({required this.hotelId});
 }

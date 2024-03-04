@@ -14,8 +14,8 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
 
   FutureOr<void> _getInitialDetailPageData(
       GetDetailPageInitialData event, Emitter<DetailState> emit) {
-    int index = int.parse(event.hotelId);
-    RestModel hotel = hotelList.firstWhere((element) => element.id == index);
-  
+    RestModel hotel =
+        hotelList.firstWhere((element) => element.id == event.hotelId);
+    emit(OnGetDetailPageInitialData(hotelDetail: hotel));
   }
 }

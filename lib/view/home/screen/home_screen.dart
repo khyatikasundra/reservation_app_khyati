@@ -32,8 +32,12 @@ class _HomeScreenState extends State<HomeScreen> {
             _recommendedHotelList = state.recommendedList;
           }
           if (state is OnGetRecommendedItemSelected) {
-            Navigator.pushNamed(context, DetailPage.tag,
-                arguments: state.selectedHotelId);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DetailPage(
+                          hotelId: state.selectedHotelId,
+                        )));
           }
         },
         builder: (context, state) {

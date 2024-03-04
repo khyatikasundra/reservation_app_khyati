@@ -14,7 +14,7 @@ class StringAsset {
   final String kPopularPlaces = "Popular Place";
 
   //Detail Screen
-  final String kDetailPlace ="Detail Place";
+  final String kDetailPlace = "Detail Place";
 
   //hotel and location name
   final String kFLavorJunction = "Flavor Junction";
@@ -30,6 +30,17 @@ class StringAsset {
   final String kloremIpsum =
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularized in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
 
+  // hotel address
+  final String kFLavorJunctionAddress =
+      "Serenity Lodge 123 Tranquil Lane Blissville, Zenith Province,Jakarta, Indonesia";
+  final String kRootenineCafeAddress =
+      "Azure View Hotel456 Ocean Breeze Avenue Harmony Heights, Sunset City,Bundung, Indonesia";
+  final String kMitsuiHotelAddress =
+      "Crystal Palace Inn789 Diamond Street Sapphire Springs, Horizon Hills,Gujarat, India";
+  final String kGoldenResortAddress =
+      "Tranquility Suites 101 Peaceful Drive Emerald Valley, Harmony County,Sunny Beach, Bulgaria";
+  final String kMysticHotelAddress =
+      "Sunset Sands Resort 246 Golden Beach Road Twilight Town, Zenith Nation,Maui, Hawaii";
   //food and  drink name
   final String kFireCrackerChickenTenders = "FireCracker Chicken Tenders";
   final String kChilliPepperCheeseFries = "Chilli Pepper Cheese Fries";
@@ -41,6 +52,4 @@ class StringAsset {
 
   //review Name
   final String kRonaldRichards = "Ronald Richard";
-
-
 }

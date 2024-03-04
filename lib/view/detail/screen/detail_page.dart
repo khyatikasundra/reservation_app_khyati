@@ -4,17 +4,15 @@ import 'package:reservation_app/view/detail/bloc/detail_bloc.dart';
 import 'package:reservation_app/view/detail/screen/detail_screen.dart';
 
 class DetailPage extends StatelessWidget {
-  static const String tag = "Detail page";
-  const DetailPage({super.key});
+  final int hotelId;
+  const DetailPage({required this.hotelId, super.key});
 
   @override
   Widget build(BuildContext context) {
-    final hotelSelected = ModalRoute.of(context)?.settings.arguments;
-    print(hotelSelected);
     return BlocProvider<DetailBloc>(
       create: (context) => DetailBloc(),
       child: DetailScreen(
-        hotelId: hotelSelected,
+        hotelId: hotelId,
       ),
     );
   }

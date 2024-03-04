@@ -16,7 +16,6 @@ class MainApp extends StatelessWidget {
       home: const LandingPage(),
       routes: {
         LandingPage.tag: (context) => const LandingPage(),
-        DetailPage.tag: (context) => const DetailPage()
       },
       theme: ThemeData(
           textTheme: const TextTheme(
