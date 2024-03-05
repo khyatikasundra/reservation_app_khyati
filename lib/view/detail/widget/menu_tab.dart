@@ -8,14 +8,10 @@ class MenuTab extends StatelessWidget {
   final List<FoodMenuModel> foodList;
   final List<FoodMenuModel> beverageList;
   final DetailBloc detailBloc;
-  final int count;
-  final String foodIdSelected;
   const MenuTab(
       {required this.foodList,
       required this.beverageList,
       required this.detailBloc,
-      required this.foodIdSelected,
-      required this.count,
       super.key});
 
   @override

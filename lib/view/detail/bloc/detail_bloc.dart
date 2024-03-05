@@ -11,7 +11,8 @@ part 'detail_state.dart';
 class DetailBloc extends Bloc<DetailEvent, DetailState> {
   List<FoodMenuModel> _foodList = [];
   List<FoodMenuModel> _drinkList = [];
-
+  bool _isAnyMenuItemSelected = false;
+  int _totalPrice = 0;
   late RestModel _hotel;
   DetailBloc() : super(DetailInitial()) {
     on<GetDetailPageInitialData>(_getInitialDetailPageData);
@@ -24,16 +25,20 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
     _hotel = hotelList.firstWhere((element) => element.id == event.hotelId);
     _foodList = _hotel.menu.food;
     _drinkList = _hotel.menu.drink;
-    emit(OnGetDetailPageInitialData(hotelDetail: _hotel));
+    _totalPrice = _hotel.hotelReservationPrice;
+    emit(OnGetDetailPageInitialData(
+        hotelDetail: _hotel, totalPrice: _totalPrice));
   }
 
   FutureOr<void> _addRemoveItem(
       ItemAddRemoveEvent event, Emitter<DetailState> emit) {
     _countIncrementDecrement(event);
+    _anyItemSelected();
     emit(OnGetAddRemoveItemState(
-      updatedFoodCount: _foodList,
-      updatedBeverageCount: _drinkList,
-    ));
+        updatedFoodCount: _foodList,
+        updatedBeverageCount: _drinkList,
+        isAnyMenuItemSelected: _isAnyMenuItemSelected,
+        totalPrice: _totalPrice));
   }
 
   void _countIncrementDecrement(ItemAddRemoveEvent event) {
@@ -68,7 +73,21 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
 
         break;
     }
+    _anyItemSelected();
     emit(OnGetAddRemoveItemState(
-        updatedFoodCount: _foodList, updatedBeverageCount: _drinkList));
+        updatedFoodCount: _foodList,
+        updatedBeverageCount: _drinkList,
+        isAnyMenuItemSelected: _isAnyMenuItemSelected,
+        totalPrice: _totalPrice));
+  }
+
+  void _anyItemSelected() {
+    var menuList = [..._foodList, ...drinkList];
+    _isAnyMenuItemSelected = menuList.any((item) => item.count > 0);
+    for (int i = 0; i < menuList.length; i++) {
+      if (menuList[i].count > 0) {
+        _totalPrice += (menuList[i].count * menuList[i].menuPrice);
+      }
+    }
   }
 }

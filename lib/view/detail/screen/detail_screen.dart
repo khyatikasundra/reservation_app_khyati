@@ -1,11 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:reservation_app/model/about_model.dart';
-import 'package:reservation_app/model/carousel_image_model.dart';
 import 'package:reservation_app/model/menu_model.dart';
 import 'package:reservation_app/model/rest_model.dart';
-import 'package:reservation_app/model/review_model.dart';
 import 'package:reservation_app/strings/ui_string.dart';
 import 'package:reservation_app/view/detail/bloc/detail_bloc.dart';
 import 'package:reservation_app/view/detail/widget/about_tab.dart';
@@ -22,26 +19,12 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   late DetailBloc _detailBloc;
-  int _count = 0;
-  String _selectedFoodId = "";
-  final String _orderButtonText = UiString.stringAsset.kReservation;
+  bool _isAnyMenuItemAdd = false;
   List<FoodMenuModel> _foodList = [];
   List<FoodMenuModel> _beverageList = [];
+  int _totalPrice = 0;
 
-  RestModel _hotelDetail = RestModel(
-      id: 5,
-      hotelName: UiString.stringAsset.kMysticHotel,
-      location: UiString.stringAsset.kMauiHawaii,
-      imageURL:
-          "https://i.pinimg.com/564x/52/eb/bb/52ebbb41ad6bd5bee8f889e2fbd6ef19.jpg",
-      description: UiString.stringAsset.kloremIpsum,
-      rating: 5,
-      about: AboutModel(description: UiString.stringAsset.kloremIpsum),
-      menu: MenuModel(food: foodList, drink: drinkList),
-      review: reviewList,
-      images: images,
-      hotelAddress: UiString.stringAsset.kFLavorJunctionAddress,
-      hotelReservationPrice: 160);
+  RestModel _hotelDetail = hotelList[0];
 
   @override
   void initState() {
@@ -58,10 +41,13 @@ class _DetailScreenState extends State<DetailScreen> {
           _hotelDetail = state.hotelDetail;
           _beverageList = state.hotelDetail.menu.drink;
           _foodList = state.hotelDetail.menu.food;
+          _totalPrice = state.totalPrice;
         }
         if (state is OnGetAddRemoveItemState) {
           _foodList = state.updatedFoodCount;
           _beverageList = state.updatedBeverageCount;
+          _isAnyMenuItemAdd = state.isAnyMenuItemSelected;
+          _totalPrice = state.totalPrice;
         }
       },
       builder: (context, state) {
@@ -118,8 +104,6 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
                 MenuTab(
                   detailBloc: _detailBloc,
-                  count: _count,
-                  foodIdSelected: _selectedFoodId,
                   foodList: _foodList,
                   beverageList: _beverageList,
                 ),
@@ -132,7 +116,7 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  ColoredBox _bottomSheet(BuildContext context) {
+  Widget _bottomSheet(BuildContext context) {
     return ColoredBox(
       color: Colors.amber,
       child: SizedBox(
@@ -142,8 +126,7 @@ class _DetailScreenState extends State<DetailScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(UiString.stringAsset.kIDR +
-                  _hotelDetail.hotelReservationPrice.toStringAsFixed(3)),
+              Text(UiString.stringAsset.kIDR + _totalPrice.toStringAsFixed(3)),
               ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.red),
@@ -151,7 +134,9 @@ class _DetailScreenState extends State<DetailScreen> {
                           borderRadius: BorderRadius.circular(8)))),
                   onPressed: () {},
                   child: Text(
-                    _orderButtonText,
+                    _isAnyMenuItemAdd
+                        ? UiString.stringAsset.kOrder
+                        : UiString.stringAsset.kReservation,
                     style: Theme.of(context).textTheme.labelSmall,
                   ))
             ],

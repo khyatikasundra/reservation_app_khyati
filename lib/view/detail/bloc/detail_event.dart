@@ -25,3 +25,5 @@ class ItemAddRemoveEvent extends DetailEvent {
   const ItemAddRemoveEvent(
       {required this.addOrRemove, required this.menuId, required this.index});
 }
+
+class GetReservationStatusEvent extends DetailEvent {}
