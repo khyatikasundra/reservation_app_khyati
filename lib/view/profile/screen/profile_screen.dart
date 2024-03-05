@@ -40,7 +40,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         CircleAvatar(
                           radius: 50,
-                          foregroundImage: NetworkImage(_profileImageUrl),
+                          foregroundImage: state is OnGetProfilePageInitialData
+                              ? NetworkImage(state.profileImageUrl)
+                              : null,
+                          child: const Text("KK"),
                         ),
                         const SizedBox(
                           height: 15,

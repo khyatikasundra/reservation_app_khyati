@@ -9,6 +9,8 @@ sealed class ProfileState extends Equatable {
 
 final class ProfileInitial extends ProfileState {}
 
+class ProfileLoadingState extends ProfileState {}
+
 class OnGetProfilePageInitialData extends ProfileState {
   final String profileImageUrl;
   const OnGetProfilePageInitialData({required this.profileImageUrl});

@@ -7,14 +7,19 @@ part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   List<RestModel> _recommendedHotelList = [];
+  List<RestModel> _populatHoteList = [];
   HomeCubit() : super(HomeInitial());
 
-  void getHomeInitialData() {
+  Future<void> getHomeInitialData() async {
+    emit(HomeLoadingState());
+    await Future.delayed(const Duration(seconds: 4));
     _recommendedHotelList = reservationAppData.hotel
         .where((element) => element.rating >= 4)
         .toList();
-    emit(
-        OnGetHomeInitialDataSuccessful(recommendedList: _recommendedHotelList));
+    _populatHoteList = reservationAppData.hotel;
+
+    emit(OnGetHomeInitialDataSuccessful(
+        recommendedList: _recommendedHotelList, popularList: _populatHoteList));
   }
 
   void selectedHotelData({required int hotelId}) {

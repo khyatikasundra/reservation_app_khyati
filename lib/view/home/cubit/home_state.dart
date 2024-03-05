@@ -9,11 +9,15 @@ sealed class HomeState extends Equatable {
 
 final class HomeInitial extends HomeState {}
 
+class HomeLoadingState extends HomeState {}
+
 class OnGetHomeInitialDataSuccessful extends HomeState {
   final List<RestModel> recommendedList;
-  const OnGetHomeInitialDataSuccessful({required this.recommendedList});
+  final List<RestModel> popularList;
+  const OnGetHomeInitialDataSuccessful(
+      {required this.recommendedList, required this.popularList});
   @override
-  List<Object> get props => [recommendedList];
+  List<Object> get props => [recommendedList, popularList];
 }
 
 class OnGetRecommendedItemSelected extends HomeState {
