@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:reservation_app/view/promo/bloc/promo_bloc.dart';
+import 'package:reservation_app/view/promo/cubit/promo_cubit.dart';
 import 'package:reservation_app/view/promo/screen/promo_screen.dart';
 
 class PromoPage extends StatelessWidget {
@@ -8,8 +8,8 @@ class PromoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<PromoBloc>(
-      create: (context) => PromoBloc(),
+    return BlocProvider<PromoCubit>(
+      create: (context) => PromoCubit(),
       child: const PromoScreen(),
     );
   }

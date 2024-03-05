@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reservation_app/model/menu_model.dart';
+import 'package:reservation_app/model/reservation_app_model.dart';
 import 'package:reservation_app/model/rest_model.dart';
 import 'package:reservation_app/strings/ui_string.dart';
 import 'package:reservation_app/view/detail/bloc/detail_bloc.dart';
@@ -24,7 +25,7 @@ class _DetailScreenState extends State<DetailScreen> {
   List<FoodMenuModel> _beverageList = [];
   int _totalPrice = 0;
 
-  RestModel _hotelDetail = hotelList[0];
+  RestModel _hotelDetail = reservationAppData.hotel[0];
 
   @override
   void initState() {
@@ -36,20 +37,7 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DetailBloc, DetailState>(
-      listener: (context, state) {
-        if (state is OnGetDetailPageInitialData) {
-          _hotelDetail = state.hotelDetail;
-          _beverageList = state.hotelDetail.menu.drink;
-          _foodList = state.hotelDetail.menu.food;
-          _totalPrice = state.totalPrice;
-        }
-        if (state is OnGetAddRemoveItemState) {
-          _foodList = state.updatedFoodCount;
-          _beverageList = state.updatedBeverageCount;
-          _isAnyMenuItemAdd = state.isAnyMenuItemSelected;
-          _totalPrice = state.totalPrice;
-        }
-      },
+      listener: (context, state) => _listener(state),
       builder: (context, state) {
         return Scaffold(
           bottomSheet: _bottomSheet(context),
@@ -60,60 +48,93 @@ class _DetailScreenState extends State<DetailScreen> {
               child: DefaultTabController(
             length: 3,
             child: NestedScrollView(
-              headerSliverBuilder: (context, isScrolled) => [
-                SliverToBoxAdapter(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _carouselSlider(),
-                      Padding(
-                          padding: const EdgeInsets.only(top: 20, left: 15),
-                          child: Text(
-                            _hotelDetail.hotelName,
-                            style: Theme.of(context).textTheme.labelLarge,
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Text(
-                          _hotelDetail.hotelAddress,
-                          style: Theme.of(context).textTheme.displayMedium,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SliverPersistentHeader(
-                    floating: false,
-                    pinned: true,
-                    delegate: TabDelegate(
-                        tabBar: const TabBar(tabs: [
-                      Tab(
-                        icon: Text("About"),
-                      ),
-                      Tab(
-                        icon: Text("Menu"),
-                      ),
-                      Tab(
-                        icon: Text("Review"),
-                      )
-                    ])))
-              ],
-              body: TabBarView(children: [
-                AboutTab(
-                  aboutHotelDescription: _hotelDetail.about.description,
-                ),
-                MenuTab(
-                  detailBloc: _detailBloc,
-                  foodList: _foodList,
-                  beverageList: _beverageList,
-                ),
-                ReviewTab(reviews: _hotelDetail.review),
-              ]),
+              headerSliverBuilder: (context, isScrolled) =>
+                  [_topWidget(context), _tabBar()],
+              body: _tabBarView(state),
             ),
           )),
         );
       },
     );
+  }
+
+  void _listener(DetailState state) {
+    if (state is OnGetDetailPageInitialData) {
+      _hotelDetail = state.hotelDetail;
+      _foodList = _hotelDetail.menu.food;
+      _beverageList = _hotelDetail.menu.drink;
+      _totalPrice = state.totalPrice;
+    }
+    if (state is OnGetMenuTabItemState) {
+      _foodList = state.updatedFoodCount;
+      _beverageList = state.updatedBeverageCount;
+      _isAnyMenuItemAdd = state.isAnyMenuItemSelected;
+      _totalPrice = state.totalPrice;
+    }
+  }
+
+  SliverToBoxAdapter _topWidget(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _carouselSlider(),
+          _hotelTitle(context),
+          _hotelAddressText(context),
+        ],
+      ),
+    );
+  }
+
+  TabBarView _tabBarView(DetailState state) {
+    return TabBarView(children: [
+      AboutTab(
+        aboutHotelDescription: _hotelDetail.about.description,
+      ),
+      MenuTab(
+        detailBloc: _detailBloc,
+        foodList: _foodList,
+        beverageList: _beverageList,
+        detailState: state,
+      ),
+      ReviewTab(reviews: _hotelDetail.review),
+    ]);
+  }
+
+  SliverPersistentHeader _tabBar() {
+    return SliverPersistentHeader(
+        pinned: true,
+        delegate: TabDelegate(
+            tabBar: TabBar(tabs: [
+          Tab(
+            icon: Text(UiString.stringAsset.kAbout),
+          ),
+          Tab(
+            icon: Text(UiString.stringAsset.kMenu),
+          ),
+          Tab(
+            icon: Text(UiString.stringAsset.kReview),
+          )
+        ])));
+  }
+
+  Padding _hotelAddressText(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Text(
+        _hotelDetail.hotelAddress,
+        style: Theme.of(context).textTheme.displayMedium,
+      ),
+    );
+  }
+
+  Padding _hotelTitle(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.only(top: 20, left: 15),
+        child: Text(
+          _hotelDetail.hotelName,
+          style: Theme.of(context).textTheme.labelLarge,
+        ));
   }
 
   Widget _bottomSheet(BuildContext context) {

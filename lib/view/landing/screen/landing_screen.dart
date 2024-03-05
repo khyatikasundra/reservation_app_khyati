@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:reservation_app/strings/ui_string.dart';
 import 'package:reservation_app/view/home/screen/home_page.dart';
 import 'package:reservation_app/view/landing/bloc/landing_bloc.dart';
 import 'package:reservation_app/view/notification/screen/notification_page.dart';
@@ -39,6 +40,7 @@ class _LandingScreenState extends State<LandingScreen> {
         }
         return Scaffold(
           bottomNavigationBar: BottomNavigationBar(
+              showSelectedLabels: false,
               currentIndex: _selectedTab,
               onTap: (index) => _landingBloc.add(TabChangeEvent(index: index)),
               selectedItemColor: Colors.red,
@@ -50,12 +52,16 @@ class _LandingScreenState extends State<LandingScreen> {
     );
   }
 
-  final List<BottomNavigationBarItem> _tabItem = const [
-    BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),
+  final List<BottomNavigationBarItem> _tabItem = [
     BottomNavigationBarItem(
-        icon: Icon(Icons.notifications), label: "notifications"),
+        icon: const Icon(Icons.home), label: UiString.stringAsset.kHome),
     BottomNavigationBarItem(
-        icon: Icon(Icons.card_giftcard), label: "card gift"),
-    BottomNavigationBarItem(icon: Icon(Icons.person_2), label: "person"),
+        icon: const Icon(Icons.notifications),
+        label: UiString.stringAsset.kNotification),
+    BottomNavigationBarItem(
+        icon: const Icon(Icons.card_giftcard),
+        label: UiString.stringAsset.kPromo),
+    BottomNavigationBarItem(
+        icon: const Icon(Icons.person_2), label: UiString.stringAsset.kProfile),
   ];
 }

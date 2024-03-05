@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:reservation_app/model/menu_model.dart';
+import 'package:reservation_app/model/reservation_app_model.dart';
 import 'package:reservation_app/model/rest_model.dart';
 
 part 'detail_event.dart';
@@ -18,11 +19,13 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
     on<GetDetailPageInitialData>(_getInitialDetailPageData);
     on<ItemAddRemoveEvent>(_addRemoveItem);
     on<GetAddQuantityEvent>(_addQuantity);
+    on<GetMenuTabInitialData>(_grtMenuTabInitialData);
   }
 
   FutureOr<void> _getInitialDetailPageData(
       GetDetailPageInitialData event, Emitter<DetailState> emit) {
-    _hotel = hotelList.firstWhere((element) => element.id == event.hotelId);
+    _hotel = reservationAppData.hotel
+        .firstWhere((element) => element.id == event.hotelId);
     _foodList = _hotel.menu.food;
     _drinkList = _hotel.menu.drink;
     _totalPrice = _hotel.hotelReservationPrice;
@@ -34,7 +37,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
       ItemAddRemoveEvent event, Emitter<DetailState> emit) {
     _countIncrementDecrement(event);
     _anyItemSelected();
-    emit(OnGetAddRemoveItemState(
+    emit(OnGetMenuTabItemState(
         updatedFoodCount: _foodList,
         updatedBeverageCount: _drinkList,
         isAnyMenuItemSelected: _isAnyMenuItemSelected,
@@ -49,6 +52,10 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
             : _foodList[event.index].count = (_foodList[event.index].count > 0)
                 ? _foodList[event.index].count - 1
                 : 0;
+
+        _totalPrice = event.addOrRemove
+            ? _totalPrice + _foodList[event.index].menuPrice
+            : _totalPrice - _foodList[event.index].menuPrice;
         break;
       case 'B':
         event.addOrRemove
@@ -57,6 +64,9 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
                 (_drinkList[event.index].count > 0)
                     ? _drinkList[event.index].count - 1
                     : 0;
+        _totalPrice = event.addOrRemove
+            ? _totalPrice + _drinkList[event.index].menuPrice
+            : _totalPrice - _drinkList[event.index].menuPrice;
         break;
     }
   }
@@ -66,15 +76,19 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
     switch (event.menuId[0]) {
       case 'F':
         _foodList[event.index].count += 1;
+        _totalPrice = _totalPrice +
+            (_foodList[event.index].menuPrice * _foodList[event.index].count);
 
         break;
       case 'B':
         _drinkList[event.index].count += 1;
+        _totalPrice = _totalPrice +
+            (_drinkList[event.index].menuPrice * _drinkList[event.index].count);
 
         break;
     }
     _anyItemSelected();
-    emit(OnGetAddRemoveItemState(
+    emit(OnGetMenuTabItemState(
         updatedFoodCount: _foodList,
         updatedBeverageCount: _drinkList,
         isAnyMenuItemSelected: _isAnyMenuItemSelected,
@@ -84,10 +98,16 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
   void _anyItemSelected() {
     var menuList = [..._foodList, ...drinkList];
     _isAnyMenuItemSelected = menuList.any((item) => item.count > 0);
-    for (int i = 0; i < menuList.length; i++) {
-      if (menuList[i].count > 0) {
-        _totalPrice += (menuList[i].count * menuList[i].menuPrice);
-      }
-    }
+  }
+
+  FutureOr<void> _grtMenuTabInitialData(
+      GetMenuTabInitialData event, Emitter<DetailState> emit) async {
+    emit(DetailLoadingState());
+    await Future.delayed(const Duration(seconds: 3));
+    emit(OnGetMenuTabItemState(
+        totalPrice: _totalPrice,
+        updatedFoodCount: _foodList,
+        updatedBeverageCount: _drinkList,
+        isAnyMenuItemSelected: _isAnyMenuItemSelected));
   }
 }

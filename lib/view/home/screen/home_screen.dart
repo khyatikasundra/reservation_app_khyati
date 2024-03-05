@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:reservation_app/model/reservation_app_model.dart';
 import 'package:reservation_app/model/rest_model.dart';
 import 'package:reservation_app/strings/ui_string.dart';
 import 'package:reservation_app/view/detail/screen/detail_page.dart';
-import 'package:reservation_app/view/home/bloc/home_bloc.dart';
+import 'package:reservation_app/view/home/cubit/home_cubit.dart';
 import 'package:reservation_app/view/home/widget/popular_section_card.dart';
 import 'package:reservation_app/view/home/widget/recommended_section_card.dart';
 
@@ -14,19 +15,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late HomeBloc _homeBloc;
+  late HomeCubit _homeCubit;
   List<RestModel> _recommendedHotelList = [];
   @override
   void initState() {
-    _homeBloc = context.read<HomeBloc>();
-    _homeBloc.add(GetHomeInitialData());
+    _homeCubit = context.read<HomeCubit>();
+    _homeCubit.getHomeInitialData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<HomeBloc, HomeState>(
+      body: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
           if (state is OnGetHomeInitialDataSuccessful) {
             _recommendedHotelList = state.recommendedList;
@@ -42,13 +43,14 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         builder: (context, state) {
           return SafeArea(
+            top: false,
             child: CustomScrollView(
               slivers: [
                 _topBalanceContainer(context),
                 SliverList.builder(
-                    itemCount: hotelList.length,
-                    itemBuilder: (context, index) =>
-                        PopularSectionCard(popularItem: hotelList[index]))
+                    itemCount: reservationAppData.hotel.length,
+                    itemBuilder: (context, index) => PopularSectionCard(
+                        popularItem: reservationAppData.hotel[index]))
               ],
             ),
           );
@@ -64,8 +66,31 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             SizedBox(
               height: 200,
-              child: Stack(
-                  children: [_backgroundContainer(), _balanceCard(context)]),
+              child: Stack(children: [
+                _backgroundContainer(),
+                Positioned(
+                  top: 60,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 22),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            UiString.stringAsset.kGoodMorning,
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                          CircleAvatar(
+                            foregroundImage: NetworkImage(""),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                _balanceCard(context)
+              ]),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -82,8 +107,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (context, index) => RecommendedSectionCard(
                         recommendedItem: _recommendedHotelList[index],
                         onPress: () {
-                          _homeBloc.add(GetRecommendedCardSelected(
-                              hotelId: _recommendedHotelList[index].id));
+                          _homeCubit.selectedHotelData(
+                              hotelId: _recommendedHotelList[index].id);
                         },
                       )),
             ),

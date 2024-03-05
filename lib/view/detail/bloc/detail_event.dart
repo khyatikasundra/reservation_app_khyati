@@ -27,3 +27,5 @@ class ItemAddRemoveEvent extends DetailEvent {
 }
 
 class GetReservationStatusEvent extends DetailEvent {}
+
+class GetMenuTabInitialData extends DetailEvent {}

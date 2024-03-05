@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:reservation_app/view/detail/screen/detail_page.dart';
 import 'package:reservation_app/view/landing/screen/landing_page.dart';
 import 'package:reservation_app/view/sign_in/screen/sign_in_page.dart';
@@ -12,6 +13,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
       home: const LandingPage(),
       routes: {

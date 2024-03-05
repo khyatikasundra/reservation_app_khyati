@@ -9,6 +9,8 @@ sealed class DetailState extends Equatable {
 
 final class DetailInitial extends DetailState {}
 
+class DetailLoadingState extends DetailState {}
+
 class OnGetDetailPageInitialData extends DetailState {
   final RestModel hotelDetail;
   final int totalPrice;
@@ -16,13 +18,13 @@ class OnGetDetailPageInitialData extends DetailState {
       {required this.hotelDetail, required this.totalPrice});
 }
 
-class OnGetAddRemoveItemState extends DetailState {
+class OnGetMenuTabItemState extends DetailState {
   final List<FoodMenuModel> updatedFoodCount;
   final List<FoodMenuModel> updatedBeverageCount;
   final bool isAnyMenuItemSelected;
   final int totalPrice;
 
-  const OnGetAddRemoveItemState(
+  const OnGetMenuTabItemState(
       {required this.updatedFoodCount,
       required this.updatedBeverageCount,
       required this.isAnyMenuItemSelected,

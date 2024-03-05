@@ -9,9 +9,14 @@ class StringAsset {
 
   //Home Screen
   final String kYourCardBalance = "Your Card Balance";
+  final String kGoodMorning = "Good Morning";
   final String kIDR125 = "IDR 125.000";
   final String kRecommendedPlace = "Recommended Places";
   final String kPopularPlaces = "Popular Place";
+  final String kNotification = "Notification";
+  final String kHome = "Home";
+  final String kPromo = "Promo";
+  final String kProfile = "Profile";
 
   //Detail Screen
   final String kDetailPlace = "Detail Place";
@@ -24,6 +29,11 @@ class StringAsset {
   final String kReservation = "Reservation";
   final String kOrder = "Order";
   final String kAdd = "Add";
+
+  //Notification Screen
+  final String kAll = "All";
+  final String kInfo = "Info";
+  final String kTransaction = "Transaction";
 
   //hotel and location name
   final String kFLavorJunction = "Flavor Junction";
@@ -61,4 +71,12 @@ class StringAsset {
 
   //review Name
   final String kRonaldRichards = "Ronald Richard";
+
+  // notification list
+  final String kTopUpIDR200 = "Top Up To IDR 200.000";
+  final String kFreeDelivery = "Free Delivery";
+  final String k40PerDiscount = "40% discount up to IDR 40.000";
+  final String kFree1cedTea = "Free 1 Iced Tea";
+  final String k25perDiscount = "25% discount up to IDR 20.000";
+  final String kBuy2Get1 = "Buy 2 get 1";
 }

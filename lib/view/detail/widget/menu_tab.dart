@@ -8,22 +8,28 @@ class MenuTab extends StatelessWidget {
   final List<FoodMenuModel> foodList;
   final List<FoodMenuModel> beverageList;
   final DetailBloc detailBloc;
+  final DetailState detailState;
   const MenuTab(
       {required this.foodList,
       required this.beverageList,
       required this.detailBloc,
+      required this.detailState,
       super.key});
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        _menuTitleText(context, UiString.stringAsset.kFoodMenu),
-        _foodMenuList(),
-        _menuTitleText(context, UiString.stringAsset.kBeverageMenu),
-        _beverageMenuList(),
-      ],
-    );
+    return detailState is DetailLoadingState
+        ? const Center(
+            child: SizedBox(
+                width: 30, height: 30, child: CircularProgressIndicator()))
+        : CustomScrollView(
+            slivers: [
+              _menuTitleText(context, UiString.stringAsset.kFoodMenu),
+              _foodMenuList(),
+              _menuTitleText(context, UiString.stringAsset.kBeverageMenu),
+              _beverageMenuList(),
+            ],
+          );
   }
 
   Widget _foodMenuList() {
