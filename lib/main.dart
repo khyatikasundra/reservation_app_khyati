@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:reservation_app/view/detail/screen/detail_page.dart';
-import 'package:reservation_app/view/landing/screen/landing_page.dart';
+import 'package:reservation_app/view/home/screen/home_page.dart';
+import 'package:reservation_app/view/home/screen/home_screen.dart';
+import 'package:reservation_app/view/landing/screen/landing_screen.dart';
 import 'package:reservation_app/view/sign_in/screen/sign_in_page.dart';
 
 void main() {
@@ -18,9 +20,9 @@ class MainApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     return MaterialApp(
-      home: const LandingPage(),
+      home: LandingScreen(),
       routes: {
-        LandingPage.tag: (context) => const LandingPage(),
+        LandingScreen.tag: (context) => LandingScreen(),
       },
       theme: ThemeData(
           textTheme: const TextTheme(

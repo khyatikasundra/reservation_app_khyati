@@ -9,6 +9,8 @@ sealed class NotificationState extends Equatable {
 
 final class NotificationInitial extends NotificationState {}
 
+class NotificationLoadingState extends NotificationState {}
+
 class OnGetNotificationPageInitialData extends NotificationState {
   final List<NotificationModel> notificationList;
   final List<NotificationCategory> notificationTypeList;

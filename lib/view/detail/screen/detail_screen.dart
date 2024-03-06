@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reservation_app/model/about_model.dart';
 import 'package:reservation_app/model/menu_model.dart';
 import 'package:reservation_app/model/rest_model.dart';
+import 'package:reservation_app/model/review_model.dart';
 import 'package:reservation_app/strings/ui_string.dart';
 import 'package:reservation_app/view/detail/bloc/detail_bloc.dart';
 import 'package:reservation_app/view/detail/widget/about_tab.dart';
 import 'package:reservation_app/view/detail/widget/menu_tab.dart';
 import 'package:reservation_app/view/detail/widget/review_tab.dart';
+import 'package:reservation_app/view/home/cubit/home_cubit.dart';
 
 class DetailScreen extends StatefulWidget {
   final int hotelId;
@@ -24,6 +26,7 @@ class _DetailScreenState extends State<DetailScreen> {
   List<FoodMenuModel> _foodList = [];
   List<FoodMenuModel> _beverageList = [];
   int _totalPrice = 0;
+  List<ReviewModel> _reviewList = [];
   AboutModel _aboutModel = AboutModel(description: "");
   RestModel _hotelDetail = RestModel(
       id: 90,
@@ -48,7 +51,6 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   void dispose() {
-    print("dispose");
     super.dispose();
     _detailBloc.close();
   }
@@ -58,17 +60,20 @@ class _DetailScreenState extends State<DetailScreen> {
     return BlocConsumer<DetailBloc, DetailState>(
       listener: (context, state) => _listener(state),
       builder: (context, state) {
-        if (state is OnGetDetailPageInitialData) {
-          _hotelDetail = state.hotelDetail;
-          // _foodList = _hotelDetail.menu.food;
-          // _beverageList = _hotelDetail.menu.drink;
-          _totalPrice = state.totalPrice;
+        if (state is OnGetReviewTabInitialData) {
+          _reviewList = state.reviewList;
         }
         return Scaffold(
           appBar: AppBar(
-            title: Text(UiString.stringAsset.kDetailPlace),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            title: Center(child: Text(UiString.stringAsset.kDetailPlace)),
           ),
-          body: (state is AboutLoadingState)
+          body: (state is DetailLoadingState)
               ? SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
@@ -102,6 +107,11 @@ class _DetailScreenState extends State<DetailScreen> {
     if (state is OnGetAboutTabInitialData) {
       _aboutModel = state.aboutHotel;
     }
+    if (state is OnGetDetailPageInitialData) {
+      _hotelDetail = state.hotelDetail;
+      _totalPrice = state.totalPrice;
+      _detailBloc.add(GetAboutTabInitialData());
+    }
   }
 
   SliverToBoxAdapter _topWidget(BuildContext context) {
@@ -130,7 +140,11 @@ class _DetailScreenState extends State<DetailScreen> {
         beverageList: _beverageList,
         detailState: state,
       ),
-      ReviewTab(reviews: _hotelDetail.review),
+      ReviewTab(
+        reviews: _reviewList,
+        detailBloc: _detailBloc,
+        detailState: state,
+      ),
     ]);
   }
 

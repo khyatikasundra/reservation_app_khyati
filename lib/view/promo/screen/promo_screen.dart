@@ -19,7 +19,6 @@ class _PromoScreenState extends State<PromoScreen> {
   void initState() {
     _promoCubit = context.read<PromoCubit>();
     _promoCubit.getPromoPageInitialData();
-
     super.initState();
   }
 
@@ -27,23 +26,82 @@ class _PromoScreenState extends State<PromoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(UiString.stringAsset.kPromo),
+        title: Center(child: Text(UiString.stringAsset.kPromo)),
       ),
       body: BlocBuilder<PromoCubit, PromoState>(
         builder: (context, state) {
           if (state is OnGetPromoPageInitialData) {
             _promoList = state.promoList;
           }
-          return CustomScrollView(
-            slivers: [
-              SliverList.builder(
-                  itemCount: _promoList.length,
-                  itemBuilder: (context, index) =>
-                      NotificationCard(notificationItem: _promoList[index]))
-            ],
-          );
+          return state is PromoLoadingState
+              ? const Center(child: CircularProgressIndicator())
+              : CustomScrollView(
+                  slivers: [
+                    SliverList.builder(
+                        itemCount: _promoList.length,
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return _promoItem(index, context);
+                          }
+                          if (_promoList[index].promoType !=
+                              _promoList[index - 1].promoType) {
+                            return _promoItem(index, context);
+                          }
+                          return NotificationCard(
+                            notificationItem: _promoList[index],
+                          );
+                        })
+                  ],
+                );
         },
       ),
     );
+  }
+
+  Column _promoItem(int index, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _sectionTitle(index, context),
+        NotificationCard(
+          notificationItem: _promoList[index],
+        )
+      ],
+    );
+  }
+
+  Widget _sectionTitle(int index, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Text(
+        _promoList[index]
+                .promoType
+                ?.toString()
+                .substringAfterFullStop()
+                .capitalizeFirstLetter() ??
+            '',
+        style: Theme.of(context).textTheme.labelLarge,
+      ),
+    );
+  }
+}
+
+extension SubstringAfterFullStop on String {
+  String substringAfterFullStop() {
+    int index = indexOf('.');
+    if (index != -1) {
+      return substring(index + 1).trim();
+    } else {
+      return '';
+    }
+  }
+}
+
+extension CapitalizeFirstLetter on String {
+  String capitalizeFirstLetter() {
+    if (isEmpty) {
+      return this;
+    }
+    return this[0].toUpperCase() + substring(1);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reservation_app/view/detail/bloc/detail_bloc.dart';
 
-class AboutTab extends StatefulWidget {
+class AboutTab extends StatelessWidget {
   final String aboutHotelDescription;
   final DetailBloc detailBloc;
   final DetailState state;
@@ -12,24 +12,13 @@ class AboutTab extends StatefulWidget {
       super.key});
 
   @override
-  State<AboutTab> createState() => _AboutTabState();
-}
-
-class _AboutTabState extends State<AboutTab> {
-  @override
-  void initState() {
-    widget.detailBloc.add(GetAboutTabInitialData());
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return widget.state is AboutLoadingState
+    return state is AboutLoadingState
         ? const Center(child: CircularProgressIndicator())
         : CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: Text(widget.aboutHotelDescription),
+                child: Text(aboutHotelDescription),
               )
             ],
           );

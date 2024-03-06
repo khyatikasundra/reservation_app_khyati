@@ -9,6 +9,10 @@ sealed class PromoState extends Equatable {
 
 final class PromoInitial extends PromoState {}
 
+class PromoLoadingState extends PromoState {}
+
+class HottestListLoadingState extends PromoState {}
+
 class OnGetPromoPageInitialData extends PromoState {
   final List<NotificationModel> promoList;
   const OnGetPromoPageInitialData({required this.promoList});

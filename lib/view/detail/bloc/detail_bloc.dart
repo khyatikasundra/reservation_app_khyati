@@ -6,6 +6,7 @@ import 'package:reservation_app/model/about_model.dart';
 import 'package:reservation_app/model/menu_model.dart';
 import 'package:reservation_app/model/reservation_app_model.dart';
 import 'package:reservation_app/model/rest_model.dart';
+import 'package:reservation_app/model/review_model.dart';
 
 part 'detail_event.dart';
 part 'detail_state.dart';
@@ -23,6 +24,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
     on<GetAddQuantityEvent>(_addQuantity);
     on<GetMenuTabInitialData>(_getInitialMenuTabData);
     on<GetAboutTabInitialData>(_getInitialAboutTabData);
+    on<GetReviewTabInitialData>(_getInitialReviewData);
 
     // on<GetMenuTabInitialData>(_grtMenuTabInitialData);
   }
@@ -30,12 +32,10 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
   FutureOr<void> _getInitialDetailPageData(
       GetDetailPageInitialData event, Emitter<DetailState> emit) async {
     emit(DetailLoadingState());
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 3));
 
     _hotel = reservationAppData.hotel
         .firstWhere((element) => element.id == event.hotelId);
-    // _foodList = _hotel.menu.food;
-    // _drinkList = _hotel.menu.drink;
     _totalPrice = _hotel.hotelReservationPrice;
     emit(OnGetDetailPageInitialData(
         hotelDetail: _hotel, totalPrice: _totalPrice));
@@ -54,9 +54,16 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
   FutureOr<void> _getInitialAboutTabData(
       GetAboutTabInitialData event, Emitter<DetailState> emit) async {
     emit(AboutLoadingState());
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 1));
     _aboutModel = _hotel.about;
     emit(OnGetAboutTabInitialData(aboutHotel: _aboutModel));
+  }
+
+  FutureOr<void> _getInitialReviewData(
+      GetReviewTabInitialData event, Emitter<DetailState> emit) async {
+    emit(ReviewLoadingState());
+    await Future.delayed(const Duration(seconds: 3));
+    emit(OnGetReviewTabInitialData(reviewList: _hotel.review));
   }
 
   FutureOr<void> _addRemoveItem(

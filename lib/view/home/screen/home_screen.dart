@@ -66,12 +66,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocConsumer<HomeCubit, HomeState>(
       listener: (context, state) {
         if (state is OnGetRecommendedItemSelected) {
-          Navigator.push(
-            context,
+          Navigator.of(context, rootNavigator: true).push(
             MaterialPageRoute(
-              builder: (context) => DetailPage(
-                hotelId: state.selectedHotelId,
-              ),
+              builder: (BuildContext context) {
+                return DetailPage(
+                  hotelId: state.selectedHotelId,
+                );
+              },
             ),
           );
         }
@@ -90,15 +91,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? const SliverToBoxAdapter(
                       child: Center(
                         child: SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: CircularProgressIndicator()),
+                          width: 30,
+                          height: 30,
+                          child: CircularProgressIndicator(),
+                        ),
                       ),
                     )
                   : SliverList.builder(
                       itemCount: _popularHotelList.length,
                       itemBuilder: (context, index) => PopularSectionCard(
-                          popularItem: _popularHotelList[index]))
+                        popularItem: _popularHotelList[index],
+                      ),
+                    )
             ],
           ),
         );

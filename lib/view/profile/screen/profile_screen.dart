@@ -11,7 +11,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late ProfileCubit _profileCubit;
-  String _profileImageUrl = "";
+
   @override
   void initState() {
     _profileCubit = context.read<ProfileCubit>();
@@ -23,9 +23,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<ProfileCubit, ProfileState>(builder: (context, state) {
-        if (state is OnGetProfilePageInitialData) {
-          _profileImageUrl = state.profileImageUrl;
-        }
         return SafeArea(
             top: false,
             child: SizedBox(

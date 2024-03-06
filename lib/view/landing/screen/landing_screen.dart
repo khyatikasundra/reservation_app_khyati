@@ -1,67 +1,72 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:reservation_app/strings/ui_string.dart';
 import 'package:reservation_app/view/home/screen/home_page.dart';
-import 'package:reservation_app/view/landing/bloc/landing_bloc.dart';
 import 'package:reservation_app/view/notification/screen/notification_page.dart';
 import 'package:reservation_app/view/profile/screen/profile_page.dart';
 import 'package:reservation_app/view/promo/screen/promo_page.dart';
 
-class LandingScreen extends StatefulWidget {
-  const LandingScreen({super.key});
+class LandingScreen extends StatelessWidget {
+  static const String tag = "LandingScreen";
 
-  @override
-  State<LandingScreen> createState() => _LandingScreenState();
-}
+  final PersistentTabController _controller =
+      PersistentTabController(initialIndex: 0);
 
-class _LandingScreenState extends State<LandingScreen> {
-  late LandingBloc _landingBloc;
-  int _selectedTab = 0;
-
-  final List _pages = [
+  final List<Widget> _pages = [
     const HomePage(),
     const NotificationPage(),
     const PromoPage(),
     const ProfilePage(),
   ];
 
-  @override
-  void initState() {
-    _landingBloc = context.read<LandingBloc>();
-    super.initState();
-  }
+  LandingScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LandingBloc, LandingState>(
-      builder: (context, state) {
-        if (state is OnTabChangeState) {
-          _selectedTab = state.index;
-        }
-        return Scaffold(
-          bottomNavigationBar: BottomNavigationBar(
-              showSelectedLabels: false,
-              currentIndex: _selectedTab,
-              onTap: (index) => _landingBloc.add(TabChangeEvent(index: index)),
-              selectedItemColor: Colors.red,
-              unselectedItemColor: Colors.grey,
-              items: _tabItem),
-          body: _pages.elementAt(_selectedTab),
-        );
-      },
+    return PersistentTabView(
+      context,
+      controller: _controller,
+      screens: _pages,
+      items: _navBarsItems(),
+      confineInSafeArea: true,
+      backgroundColor: Colors.white,
+      handleAndroidBackButtonPress: true,
+      resizeToAvoidBottomInset: true,
+      stateManagement: true,
+      hideNavigationBarWhenKeyboardShows: true,
+      popAllScreensOnTapOfSelectedTab: true,
+      popActionScreens: PopActionScreensType.all,
+      itemAnimationProperties: const ItemAnimationProperties(
+        duration: Duration(milliseconds: 200),
+        curve: Curves.ease,
+      ),
+      screenTransitionAnimation: const ScreenTransitionAnimation(
+        animateTabTransition: true,
+        curve: Curves.ease,
+        duration: Duration(milliseconds: 200),
+      ),
+      navBarStyle: NavBarStyle.style3,
     );
   }
 
-  final List<BottomNavigationBarItem> _tabItem = [
-    BottomNavigationBarItem(
-        icon: const Icon(Icons.home), label: UiString.stringAsset.kHome),
-    BottomNavigationBarItem(
+  List<PersistentBottomNavBarItem> _navBarsItems() {
+    return [
+      PersistentBottomNavBarItem(
+        icon: const Icon(Icons.home),
+        title: UiString.stringAsset.kHome,
+      ),
+      PersistentBottomNavBarItem(
         icon: const Icon(Icons.notifications),
-        label: UiString.stringAsset.kNotification),
-    BottomNavigationBarItem(
+        title: UiString.stringAsset.kNotification,
+      ),
+      PersistentBottomNavBarItem(
         icon: const Icon(Icons.card_giftcard),
-        label: UiString.stringAsset.kPromo),
-    BottomNavigationBarItem(
-        icon: const Icon(Icons.person_2), label: UiString.stringAsset.kProfile),
-  ];
+        title: UiString.stringAsset.kPromo,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(Icons.person_2),
+        title: UiString.stringAsset.kProfile,
+      ),
+    ];
+  }
 }

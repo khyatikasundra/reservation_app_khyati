@@ -14,7 +14,8 @@ class NotificationScreen extends StatefulWidget {
   State<NotificationScreen> createState() => _NotificationScreenState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen> {
+class _NotificationScreenState extends State<NotificationScreen>
+    with AutomaticKeepAliveClientMixin {
   late NotificationCubit _notificationCubit;
   List<NotificationModel> _notificationList = [];
   List<NotificationCategory> _notificationTypeList = [];
@@ -26,7 +27,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(UiString.stringAsset.kNotification),
@@ -41,31 +45,34 @@ class _NotificationScreenState extends State<NotificationScreen> {
               _notificationList = state.notificationList;
               _notificationTypeList = state.notificationTypeList;
             }
-            return CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 40,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _notificationTypeList.length,
-                        itemBuilder: (context, index) {
-                          print(_notificationTypeList[index].typeName);
-                          return SortItemCard(
-                            notificationTypeItem: _notificationTypeList[index],
-                            notificationCubit: _notificationCubit,
-                            index: index,
-                          );
-                        }),
-                  ),
-                ),
-                SliverList.builder(
-                    itemCount: _notificationList.length,
-                    itemBuilder: (context, index) => NotificationCard(
-                          notificationItem: _notificationList[index],
-                        ))
-              ],
-            );
+            return state is NotificationLoadingState
+                ? Center(child: CircularProgressIndicator())
+                : CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 40,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _notificationTypeList.length,
+                              itemBuilder: (context, index) {
+                                print(_notificationTypeList[index].typeName);
+                                return SortItemCard(
+                                  notificationTypeItem:
+                                      _notificationTypeList[index],
+                                  notificationCubit: _notificationCubit,
+                                  index: index,
+                                );
+                              }),
+                        ),
+                      ),
+                      SliverList.builder(
+                          itemCount: _notificationList.length,
+                          itemBuilder: (context, index) => NotificationCard(
+                                notificationItem: _notificationList[index],
+                              ))
+                    ],
+                  );
           }),
     );
   }

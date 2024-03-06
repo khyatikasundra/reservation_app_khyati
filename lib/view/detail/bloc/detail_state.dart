@@ -36,6 +36,11 @@ class OnGetAboutTabInitialData extends DetailState {
   const OnGetAboutTabInitialData({required this.aboutHotel});
 }
 
+class OnGetReviewTabInitialData extends DetailState {
+  final List<ReviewModel> reviewList;
+  const OnGetReviewTabInitialData({required this.reviewList});
+}
+
 class OnGetMenuTabItemState extends DetailState {
   final List<FoodMenuModel> updatedFoodCount;
   final List<FoodMenuModel> updatedBeverageCount;

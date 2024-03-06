@@ -10,7 +10,9 @@ class NotificationCubit extends Cubit<NotificationState> {
   List<NotificationModel> _notificationList = [];
   List<NotificationCategory> _notificationTypeList = [];
   NotificationCubit() : super(NotificationInitial());
-  void notificationScreenInitialData() {
+  void notificationScreenInitialData() async {
+    emit(NotificationLoadingState());
+    await Future.delayed(const Duration(seconds: 3));
     _notificationList = reservationAppData.notification;
     _notificationTypeList = CustomList.notificationType;
     emit(OnGetNotificationPageInitialData(
