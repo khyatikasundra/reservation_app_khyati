@@ -13,15 +13,28 @@ class FoodMenuModel {
   final String id;
   final String menuName;
   final int menuPrice;
-  int count;
-  FoodMenuModel(
-      {required this.id,
-      required this.menuName,
-      required this.menuPrice,
-      this.count = 0});
+  final int count;
+
+  FoodMenuModel({
+    required this.id,
+    required this.menuName,
+    required this.menuPrice,
+    this.count = 0,
+  });
+
+  FoodMenuModel copyWith({
+    int? count,
+  }) {
+    return FoodMenuModel(
+      id: id,
+      menuName: menuName,
+      menuPrice: menuPrice,
+      count: count ?? this.count, 
+    );
+  }
 }
 
-List<FoodMenuModel> foodList = [
+final List<FoodMenuModel> foodList = [
   FoodMenuModel(
       menuName: UiString.stringAsset.kFireCrackerChickenTenders,
       menuPrice: 35,
@@ -50,7 +63,7 @@ List<FoodMenuModel> foodList = [
 //       this.count = 0});
 // }
 
-List<FoodMenuModel> drinkList = [
+final List<FoodMenuModel> drinkList = [
   FoodMenuModel(
       menuName: UiString.stringAsset.kSpicedGuavaRefresher,
       menuPrice: 20,

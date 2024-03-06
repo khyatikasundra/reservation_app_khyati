@@ -12,6 +12,12 @@ class GetDetailPageInitialData extends DetailEvent {
   const GetDetailPageInitialData({required this.hotelId});
 }
 
+class GetMenuTabInitialData extends DetailEvent {}
+
+class GetAboutTabInitialData extends DetailEvent {}
+
+class GetReviewTabInitialData extends DetailEvent {}
+
 class GetAddQuantityEvent extends DetailEvent {
   final int index;
   final String menuId;
@@ -28,4 +34,4 @@ class ItemAddRemoveEvent extends DetailEvent {
 
 class GetReservationStatusEvent extends DetailEvent {}
 
-class GetMenuTabInitialData extends DetailEvent {}
+// class GetMenuTabInitialData extends DetailEvent {}

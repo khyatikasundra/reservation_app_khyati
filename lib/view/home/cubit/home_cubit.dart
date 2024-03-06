@@ -12,7 +12,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> getHomeInitialData() async {
     emit(HomeLoadingState());
-    await Future.delayed(const Duration(seconds: 4));
+    await Future.delayed(const Duration(seconds: 1));
     _recommendedHotelList = reservationAppData.hotel
         .where((element) => element.rating >= 4)
         .toList();

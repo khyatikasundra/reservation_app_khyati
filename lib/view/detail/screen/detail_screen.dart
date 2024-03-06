@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:reservation_app/model/about_model.dart';
 import 'package:reservation_app/model/menu_model.dart';
-import 'package:reservation_app/model/reservation_app_model.dart';
 import 'package:reservation_app/model/rest_model.dart';
 import 'package:reservation_app/strings/ui_string.dart';
 import 'package:reservation_app/view/detail/bloc/detail_bloc.dart';
@@ -24,8 +24,20 @@ class _DetailScreenState extends State<DetailScreen> {
   List<FoodMenuModel> _foodList = [];
   List<FoodMenuModel> _beverageList = [];
   int _totalPrice = 0;
-
-  RestModel _hotelDetail = reservationAppData.hotel[0];
+  AboutModel _aboutModel = AboutModel(description: "");
+  RestModel _hotelDetail = RestModel(
+      id: 90,
+      hotelName: "",
+      hotelReservationPrice: 400,
+      location: "",
+      description: "",
+      imageURL: "",
+      hotelAddress: "",
+      rating: 2,
+      about: AboutModel(description: ""),
+      menu: MenuModel(drink: [], food: []),
+      review: [],
+      images: []);
 
   @override
   void initState() {
@@ -35,41 +47,60 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   @override
+  void dispose() {
+    print("dispose");
+    super.dispose();
+    _detailBloc.close();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<DetailBloc, DetailState>(
       listener: (context, state) => _listener(state),
       builder: (context, state) {
+        if (state is OnGetDetailPageInitialData) {
+          _hotelDetail = state.hotelDetail;
+          // _foodList = _hotelDetail.menu.food;
+          // _beverageList = _hotelDetail.menu.drink;
+          _totalPrice = state.totalPrice;
+        }
         return Scaffold(
-          bottomSheet: _bottomSheet(context),
           appBar: AppBar(
             title: Text(UiString.stringAsset.kDetailPlace),
           ),
-          body: SafeArea(
-              child: DefaultTabController(
-            length: 3,
-            child: NestedScrollView(
-              headerSliverBuilder: (context, isScrolled) =>
-                  [_topWidget(context), _tabBar()],
-              body: _tabBarView(state),
-            ),
-          )),
+          body: (state is AboutLoadingState)
+              ? SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: const Center(child: CircularProgressIndicator()))
+              : SafeArea(
+                  child: DefaultTabController(
+                  length: 3,
+                  child: NestedScrollView(
+                    headerSliverBuilder: (context, isScrolled) =>
+                        [_topWidget(context), _tabBar()],
+                    body: _tabBarView(state),
+                  ),
+                )),
+          bottomSheet: _bottomSheet(context),
         );
       },
     );
   }
 
   void _listener(DetailState state) {
-    if (state is OnGetDetailPageInitialData) {
-      _hotelDetail = state.hotelDetail;
-      _foodList = _hotelDetail.menu.food;
-      _beverageList = _hotelDetail.menu.drink;
-      _totalPrice = state.totalPrice;
-    }
     if (state is OnGetMenuTabItemState) {
       _foodList = state.updatedFoodCount;
       _beverageList = state.updatedBeverageCount;
       _isAnyMenuItemAdd = state.isAnyMenuItemSelected;
       _totalPrice = state.totalPrice;
+    }
+    if (state is OnGetMenuTabInitialData) {
+      _foodList = state.foodList;
+      _beverageList = state.beverageList;
+    }
+    if (state is OnGetAboutTabInitialData) {
+      _aboutModel = state.aboutHotel;
     }
   }
 
@@ -89,7 +120,9 @@ class _DetailScreenState extends State<DetailScreen> {
   TabBarView _tabBarView(DetailState state) {
     return TabBarView(children: [
       AboutTab(
-        aboutHotelDescription: _hotelDetail.about.description,
+        aboutHotelDescription: _aboutModel.description,
+        detailBloc: _detailBloc,
+        state: state,
       ),
       MenuTab(
         detailBloc: _detailBloc,
@@ -138,32 +171,36 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   Widget _bottomSheet(BuildContext context) {
-    return ColoredBox(
-      color: Colors.amber,
-      child: SizedBox(
-        height: 80,
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(UiString.stringAsset.kIDR + _totalPrice.toStringAsFixed(3)),
-              ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.red),
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)))),
-                  onPressed: () {},
-                  child: Text(
-                    _isAnyMenuItemAdd
-                        ? UiString.stringAsset.kOrder
-                        : UiString.stringAsset.kReservation,
-                    style: Theme.of(context).textTheme.labelSmall,
-                  ))
-            ],
+    return BottomSheet(
+      builder: (context) => ColoredBox(
+        color: Colors.amber,
+        child: SizedBox(
+          height: 80,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                    UiString.stringAsset.kIDR + _totalPrice.toStringAsFixed(3)),
+                ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.red),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)))),
+                    onPressed: () {},
+                    child: Text(
+                      _isAnyMenuItemAdd
+                          ? UiString.stringAsset.kOrder
+                          : UiString.stringAsset.kReservation,
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ))
+              ],
+            ),
           ),
         ),
       ),
+      onClosing: () {},
     );
   }
 

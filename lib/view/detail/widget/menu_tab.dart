@@ -4,7 +4,7 @@ import 'package:reservation_app/strings/ui_string.dart';
 import 'package:reservation_app/view/detail/bloc/detail_bloc.dart';
 import 'package:reservation_app/view/detail/widget/menu_card.dart';
 
-class MenuTab extends StatelessWidget {
+class MenuTab extends StatefulWidget {
   final List<FoodMenuModel> foodList;
   final List<FoodMenuModel> beverageList;
   final DetailBloc detailBloc;
@@ -17,11 +17,21 @@ class MenuTab extends StatelessWidget {
       super.key});
 
   @override
+  State<MenuTab> createState() => _MenuTabState();
+}
+
+class _MenuTabState extends State<MenuTab> with AutomaticKeepAliveClientMixin {
+  @override
+  void initState() {
+    widget.detailBloc.add(GetMenuTabInitialData());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return detailState is DetailLoadingState
-        ? const Center(
-            child: SizedBox(
-                width: 30, height: 30, child: CircularProgressIndicator()))
+    super.build(context);
+    return widget.detailState is MenuLoadingState
+        ? const Center(child: CircularProgressIndicator())
         : CustomScrollView(
             slivers: [
               _menuTitleText(context, UiString.stringAsset.kFoodMenu),
@@ -34,18 +44,20 @@ class MenuTab extends StatelessWidget {
 
   Widget _foodMenuList() {
     return SliverList.builder(
-        itemCount: foodList.length,
+        itemCount: widget.foodList.length,
         itemBuilder: (context, index) => MenuCard(
-            foodItem: foodList[index], index: index, detailBloc: detailBloc));
+            foodItem: widget.foodList[index],
+            index: index,
+            detailBloc: widget.detailBloc));
   }
 
   SliverList _beverageMenuList() {
     return SliverList.builder(
-        itemCount: beverageList.length,
+        itemCount: widget.beverageList.length,
         itemBuilder: (context, index) => MenuCard(
-            foodItem: beverageList[index],
+            foodItem: widget.beverageList[index],
             index: index,
-            detailBloc: detailBloc));
+            detailBloc: widget.detailBloc));
   }
 
   Widget _menuTitleText(BuildContext context, String title) {
@@ -59,4 +71,7 @@ class MenuTab extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -8,7 +8,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit() : super(ProfileInitial());
   void getProfilePageInitialData() async {
     emit(ProfileLoadingState());
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 1));
     _profileImageUrl =
         "https://i.pinimg.com/736x/e9/45/90/e94590f7e6cad3418a5aa2a753c467c4.jpg";
     emit(OnGetProfilePageInitialData(profileImageUrl: _profileImageUrl));

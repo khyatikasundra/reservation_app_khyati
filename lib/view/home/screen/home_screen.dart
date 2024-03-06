@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late HomeCubit _homeCubit;
   late ProfileCubit _profileCubit;
   List<RestModel> _recommendedHotelList = [];
-  List<RestModel> _populartHotelList = [];
+  List<RestModel> _popularHotelList = [];
   @override
   void initState() {
     _homeCubit = context.read<HomeCubit>();
@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, state) {
         if (state is OnGetHomeInitialDataSuccessful) {
           _recommendedHotelList = state.recommendedList;
-          _populartHotelList = state.popularList;
+          _popularHotelList = state.popularList;
         }
         return SafeArea(
           top: false,
@@ -96,9 +96,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     )
                   : SliverList.builder(
-                      itemCount: _populartHotelList.length,
+                      itemCount: _popularHotelList.length,
                       itemBuilder: (context, index) => PopularSectionCard(
-                          popularItem: _populartHotelList[index]))
+                          popularItem: _popularHotelList[index]))
             ],
           ),
         );
