@@ -16,10 +16,14 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+            side: const BorderSide(color: Colors.grey, width: 1)),
         child: Padding(
             padding: const EdgeInsets.all(8),
             child: TextFormField(
-              decoration: InputDecoration(hintText: hintText),
+              decoration:
+                  InputDecoration(hintText: hintText, border: InputBorder.none),
               controller: textEditingController,
               inputFormatters: [LengthLimitingTextInputFormatter(maxLength)],
               validator: validator,

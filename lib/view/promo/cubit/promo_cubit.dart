@@ -15,8 +15,8 @@ class PromoCubit extends Cubit<PromoState> {
   }
 
   void getHottestList() async {
-    emit(HottestDataLoadingState());
-    await Future.delayed(const Duration(seconds: 3));
+    emit(PromoLoadingState());
+    await Future.delayed(const Duration(seconds: 2));
     final List<NotificationModel> promoList = reservationAppData.notification
         .where((element) => element.category == NotificationType.promo)
         .toList();
@@ -27,8 +27,8 @@ class PromoCubit extends Cubit<PromoState> {
   }
 
   void getRecommendationList() async {
-    emit(RecommendationDataLoadingState());
-    await Future.delayed(const Duration(seconds: 2));
+    emit(PromoLoadingState());
+    await Future.delayed(const Duration(seconds: 3));
     final List<NotificationModel> promoList = reservationAppData.notification
         .where((element) => element.category == NotificationType.promo)
         .toList();

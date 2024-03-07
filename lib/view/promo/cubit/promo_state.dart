@@ -11,10 +11,6 @@ final class PromoInitial extends PromoState {}
 
 class PromoLoadingState extends PromoState {}
 
-class HottestDataLoadingState extends PromoState {}
-
-class RecommendationDataLoadingState extends PromoState {}
-
 class OnGetHottestPromoData extends PromoState {
   final List<NotificationModel> hottestList;
   const OnGetHottestPromoData({required this.hottestList});
@@ -28,4 +24,3 @@ class OnGetRecommendationPromoData extends PromoState {
   @override
   List<Object> get props => [recommendationList];
 }
-

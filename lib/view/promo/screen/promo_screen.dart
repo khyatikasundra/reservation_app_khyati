@@ -42,11 +42,12 @@ class _PromoScreenState extends State<PromoScreen> {
 
   Widget _buildHottestList() {
     return BlocBuilder<PromoCubit, PromoState>(
+      buildWhen: (previous, current) => current is OnGetHottestPromoData,
       builder: (context, state) {
         if (state is OnGetHottestPromoData) {
           _hottestList = state.hottestList;
         }
-        return state is HottestDataLoadingState
+        return state is PromoLoadingState
             ? const SliverLoader()
             : SliverList.builder(
                 itemBuilder: (context, index) =>
@@ -59,11 +60,12 @@ class _PromoScreenState extends State<PromoScreen> {
 
   Widget _buildRecommendationList() {
     return BlocBuilder<PromoCubit, PromoState>(
+      buildWhen: (previous, current) => current is OnGetRecommendationPromoData,
       builder: (context, state) {
         if (state is OnGetRecommendationPromoData) {
           _recommendationList = state.recommendationList;
         }
-        return state is RecommendationDataLoadingState
+        return state is PromoLoadingState
             ? const SliverLoader()
             : SliverList.builder(
                 itemBuilder: (context, index) => NotificationCard(

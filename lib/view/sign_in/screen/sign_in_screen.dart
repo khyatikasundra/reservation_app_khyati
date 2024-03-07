@@ -5,6 +5,7 @@ import 'package:reservation_app/strings/ui_string.dart';
 import 'package:reservation_app/view/landing/screen/landing_screen.dart';
 import 'package:reservation_app/view/sign_in/bloc/sign_in_bloc.dart';
 import 'package:reservation_app/view/sign_in/widget/custom_text_field.dart';
+import 'package:reservation_app/widget/material_loader.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -37,8 +38,7 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  void _listener(SignInState state, BuildContext context)  {
-
+  void _listener(SignInState state, BuildContext context) {
     if (state is OnSignUpSuccessfulState) {
       Navigator.pushReplacementNamed(context, LandingScreen.tag);
     }
@@ -104,21 +104,25 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Widget _loginButton(SignInState state) => Center(
-        child: ElevatedButton(
-            style: _loginButtonStyle(),
-            onPressed: () {
-              _validation();
-            },
-            child: state is SignInLoader
-                ? const CircularProgressIndicator()
-                : Text(
-                    UiString.stringAsset.loginButtonText,
-                    style: Theme.of(context).textTheme.displayLarge,
-                  )),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: ElevatedButton(
+              style: _loginButtonStyle(),
+              onPressed: () {
+                _validation();
+              },
+              child: state is SignInLoader
+                  ? const MaterialLoader()
+                  : Text(
+                      UiString.stringAsset.loginButtonText,
+                      style: Theme.of(context).textTheme.displayLarge,
+                    )),
+        ),
       );
 
   ButtonStyle _loginButtonStyle() {
     return ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.red),
         elevation: MaterialStateProperty.all(5),
         shape: MaterialStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))));
