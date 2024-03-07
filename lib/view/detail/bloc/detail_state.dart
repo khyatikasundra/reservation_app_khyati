@@ -19,7 +19,7 @@ class ReviewLoadingState extends DetailState {}
 
 class OnGetDetailPageInitialData extends DetailState {
   final RestModel hotelDetail;
-  final int totalPrice;
+  final double totalPrice;
   const OnGetDetailPageInitialData(
       {required this.hotelDetail, required this.totalPrice});
 }
@@ -45,7 +45,7 @@ class OnGetMenuTabItemState extends DetailState {
   final List<FoodMenuModel> updatedFoodCount;
   final List<FoodMenuModel> updatedBeverageCount;
   final bool isAnyMenuItemSelected;
-  final int totalPrice;
+  final double totalPrice;
 
   const OnGetMenuTabItemState(
       {required this.updatedFoodCount,
@@ -60,4 +60,11 @@ class OnGetMenuTabItemState extends DetailState {
         totalPrice,
         identityHashCode(this)
       ];
+}
+
+class OnLikeUnLikeState extends DetailState {
+  final bool isLike;
+  const OnLikeUnLikeState({required this.isLike});
+  @override
+  List<Object> get props => [isLike, identityHashCode(this)];
 }

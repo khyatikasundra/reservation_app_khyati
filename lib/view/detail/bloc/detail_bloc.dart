@@ -15,7 +15,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
   List<FoodMenuModel> _foodList = [];
   List<FoodMenuModel> _drinkList = [];
   bool _isAnyMenuItemSelected = false;
-  int _totalPrice = 0;
+  double _totalPrice = 0;
   AboutModel _aboutModel = AboutModel(description: "");
   late RestModel _hotel;
   DetailBloc() : super(DetailInitial()) {
@@ -25,6 +25,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
     on<GetMenuTabInitialData>(_getInitialMenuTabData);
     on<GetAboutTabInitialData>(_getInitialAboutTabData);
     on<GetReviewTabInitialData>(_getInitialReviewData);
+    on<LikeUnLikeEvent>(_likeUnlikeEvent);
 
     // on<GetMenuTabInitialData>(_grtMenuTabInitialData);
   }
@@ -133,7 +134,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
           count: drinkListCopy[event.index].count + 1,
         );
 
-        _totalPrice += _drinkList[event.index].menuPrice;
+        _totalPrice += drinkListCopy[event.index].menuPrice;
 
         _drinkList = List.from(drinkListCopy);
         break;
@@ -148,7 +149,8 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
   }
 
   void _anyItemSelected() {
-    var menuList = [..._foodList, ...drinkList];
+    var menuList = [..._foodList, ..._drinkList];
+
     _isAnyMenuItemSelected = menuList.any((item) => item.count > 0);
   }
 
@@ -160,4 +162,9 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
   //       updatedBeverageCount: _drinkList,
   //       isAnyMenuItemSelected: _isAnyMenuItemSelected));
   // }
+
+  FutureOr<void> _likeUnlikeEvent(
+      LikeUnLikeEvent event, Emitter<DetailState> emit) {
+    emit(OnLikeUnLikeState(isLike: !event.isLike));
+  }
 }

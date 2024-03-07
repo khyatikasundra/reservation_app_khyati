@@ -1,7 +1,5 @@
 import 'package:reservation_app/strings/ui_string.dart';
 
-// enum FoodCategory { food, beverage }
-
 class MenuModel {
   final List<FoodMenuModel> food;
   final List<FoodMenuModel> drink;
@@ -12,7 +10,7 @@ class MenuModel {
 class FoodMenuModel {
   final String id;
   final String menuName;
-  final int menuPrice;
+  final double menuPrice;
   final int count;
 
   FoodMenuModel({
@@ -29,7 +27,7 @@ class FoodMenuModel {
       id: id,
       menuName: menuName,
       menuPrice: menuPrice,
-      count: count ?? this.count, 
+      count: count ?? this.count,
     );
   }
 }
@@ -37,81 +35,31 @@ class FoodMenuModel {
 final List<FoodMenuModel> foodList = [
   FoodMenuModel(
       menuName: UiString.stringAsset.kFireCrackerChickenTenders,
-      menuPrice: 35,
+      menuPrice: 35.567,
       id: "F1"),
   FoodMenuModel(
       menuName: UiString.stringAsset.kChilliPepperCheeseFries,
-      menuPrice: 35,
+      menuPrice: 35.76,
       id: "F2"),
   FoodMenuModel(
       menuName: UiString.stringAsset.kFlamingHotWings, menuPrice: 30, id: "F3"),
   FoodMenuModel(
       menuName: UiString.stringAsset.kSpicyThaiBasilChicken,
-      menuPrice: 45,
+      menuPrice: 45.12,
       id: "F4")
 ];
-
-// class BeverageMenuModel {
-//   final String id;
-//   final String drinkName;
-//   final int drinkPrice;
-//   int count;
-//   BeverageMenuModel(
-//       {required this.drinkName,
-//       required this.drinkPrice,
-//       required this.id,
-//       this.count = 0});
-// }
 
 final List<FoodMenuModel> drinkList = [
   FoodMenuModel(
       menuName: UiString.stringAsset.kSpicedGuavaRefresher,
-      menuPrice: 20,
+      menuPrice: 20.23,
       id: "B1"),
   FoodMenuModel(
       menuName: UiString.stringAsset.kSzechuanSpickenIcedTea,
-      menuPrice: 25,
+      menuPrice: 25.111,
       id: "B2"),
   FoodMenuModel(
       menuName: UiString.stringAsset.kJalapenoMintJulep,
-      menuPrice: 30,
+      menuPrice: 30.366,
       id: "B3")
 ];
-
-// class MenuModel {
-//   final String food;
-//   final int price;
-//   MenuModel({required this.food, required this.price});
-// }
-// List<MenuModel> menuFoodList = [
-//   MenuModel(
-//     food: UiString.stringAsset.kFireCrackerChickenTenders,
-//     price: 35,
-//   ),
-//   MenuModel(
-//     food: UiString.stringAsset.kChilliPepperCheeseFries,
-//     price: 35,
-//   ),
-//   MenuModel(
-//     food: UiString.stringAsset.kFlamingHotWings,
-//     price: 30,
-//   ),
-//   MenuModel(
-//     food: UiString.stringAsset.kSpicyThaiBasilChicken,
-//     price: 45,
-//   ),
-// ];
-// List<MenuModel> menuDrinkList = [
-//   MenuModel(
-//     food: UiString.stringAsset.kSpicedGuavaRefresher,
-//     price: 20,
-//   ),
-//   MenuModel(
-//     food: UiString.stringAsset.kSzechuanSpickenIcedTea,
-//     price: 25,
-//   ),
-//   MenuModel(
-//     food: UiString.stringAsset.kJalapenoMintJulep,
-//     price: 30,
-//   )
-// ];

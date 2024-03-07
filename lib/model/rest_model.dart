@@ -7,7 +7,7 @@ import 'package:reservation_app/strings/ui_string.dart';
 class RestModel {
   final int id;
   final String hotelName;
-  final int hotelReservationPrice;
+  final double hotelReservationPrice;
   final String location;
   final String imageURL;
   final String hotelAddress;
@@ -17,19 +17,20 @@ class RestModel {
   final MenuModel menu;
   final List<ReviewModel> review;
   final List<CarouselImageModel> images;
-  RestModel(
-      {required this.id,
-      required this.hotelName,
-      required this.hotelReservationPrice,
-      required this.location,
-      required this.description,
-      required this.imageURL,
-      required this.hotelAddress,
-      required this.rating,
-      required this.about,
-      required this.menu,
-      required this.review,
-      required this.images});
+  RestModel({
+    required this.id,
+    required this.about,
+    required this.menu,
+    required this.review,
+    required this.images,
+    this.hotelName = "",
+    this.hotelReservationPrice = 0,
+    this.location = "",
+    this.description = "",
+    this.imageURL = "",
+    this.hotelAddress = "",
+    this.rating = 5,
+  });
 }
 
 List<RestModel> hotelList = [

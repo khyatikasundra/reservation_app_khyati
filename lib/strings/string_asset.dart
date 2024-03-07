@@ -17,6 +17,7 @@ class StringAsset {
   final String kHome = "Home";
   final String kPromo = "Promo";
   final String kProfile = "Profile";
+  final String kRating = "Rating ";
 
   //Detail Screen
   final String kDetailPlace = "Detail Place";
@@ -34,6 +35,20 @@ class StringAsset {
   final String kAll = "All";
   final String kInfo = "Info";
   final String kTransaction = "Transaction";
+
+  //Promo Screen
+  final String kHottest = "Hottest";
+  final String kRecommendation = "Recommendation";
+
+  //Profile Screen
+  final String kEnzoFernanez = "Enzo Fernanez";
+  final String kGmailCom = "Enzo@gmail.com";
+  final String kAccount = "Account";
+  final String kSelectedLocation = "Selected Location";
+  final String kTermsAndServiced = "Terms and Services";
+  final String kPayment = "Payment";
+  final String kPrivacyAndPolicy = "Privacy and Policy";
+  final String kKK = "KK";
 
   //hotel and location name
   final String kFLavorJunction = "Flavor Junction";

@@ -6,6 +6,7 @@ part 'profile_state.dart';
 class ProfileCubit extends Cubit<ProfileState> {
   String _profileImageUrl = "";
   ProfileCubit() : super(ProfileInitial());
+
   void getProfilePageInitialData() async {
     emit(ProfileLoadingState());
     await Future.delayed(const Duration(seconds: 1));

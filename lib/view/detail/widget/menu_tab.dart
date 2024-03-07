@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:reservation_app/model/menu_model.dart';
+import 'package:reservation_app/strings/point_size.dart';
 import 'package:reservation_app/strings/ui_string.dart';
 import 'package:reservation_app/view/detail/bloc/detail_bloc.dart';
 import 'package:reservation_app/view/detail/widget/menu_card.dart';
+import 'package:reservation_app/widget/material_loader.dart';
 
 class MenuTab extends StatefulWidget {
   final List<FoodMenuModel> foodList;
@@ -31,7 +33,7 @@ class _MenuTabState extends State<MenuTab> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     super.build(context);
     return widget.detailState is MenuLoadingState
-        ? const Center(child: CircularProgressIndicator())
+        ? const MaterialLoader()
         : CustomScrollView(
             slivers: [
               _menuTitleText(context, UiString.stringAsset.kFoodMenu),
@@ -51,7 +53,7 @@ class _MenuTabState extends State<MenuTab> with AutomaticKeepAliveClientMixin {
             detailBloc: widget.detailBloc));
   }
 
-  SliverList _beverageMenuList() {
+  Widget _beverageMenuList() {
     return SliverList.builder(
         itemCount: widget.beverageList.length,
         itemBuilder: (context, index) => MenuCard(
@@ -63,7 +65,7 @@ class _MenuTabState extends State<MenuTab> with AutomaticKeepAliveClientMixin {
   Widget _menuTitleText(BuildContext context, String title) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(PointSize.value10),
         child: Text(
           title,
           style: Theme.of(context).textTheme.displayMedium,

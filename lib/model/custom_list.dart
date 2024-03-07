@@ -1,4 +1,4 @@
-import 'package:reservation_app/model/notification_model.dart';
+import 'package:reservation_app/model/enums.dart';
 import 'package:reservation_app/strings/ui_string.dart';
 
 class CustomList {
@@ -13,6 +13,13 @@ class CustomList {
     NotificationCategory(
         typeName: UiString.stringAsset.kTransaction,
         category: NotificationType.transaction),
+  ];
+  static List<String> profileItemList = [
+    UiString.stringAsset.kAccount,
+    UiString.stringAsset.kSelectedLocation,
+    UiString.stringAsset.kPayment,
+    UiString.stringAsset.kTermsAndServiced,
+    UiString.stringAsset.kPrivacyAndPolicy
   ];
 }
 

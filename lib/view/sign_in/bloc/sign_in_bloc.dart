@@ -11,7 +11,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     on<LoginButtonEvent>(_validationSuccessful);
   }
 
-  FutureOr<void> _validationSuccessful(
+  void _validationSuccessful(
       LoginButtonEvent event, Emitter<SignInState> emit) async {
     emit(SignInLoader());
     await Future.delayed(const Duration(seconds: 3));

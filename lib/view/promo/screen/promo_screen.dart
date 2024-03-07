@@ -4,9 +4,10 @@ import 'package:reservation_app/model/notification_model.dart';
 import 'package:reservation_app/strings/ui_string.dart';
 import 'package:reservation_app/view/notification/widget/notification_card.dart';
 import 'package:reservation_app/view/promo/cubit/promo_cubit.dart';
+import 'package:reservation_app/widget/sliver_loader.dart';
 
 class PromoScreen extends StatefulWidget {
-  const PromoScreen({super.key});
+  const PromoScreen({Key? key}) : super(key: key);
 
   @override
   State<PromoScreen> createState() => _PromoScreenState();
@@ -14,94 +15,71 @@ class PromoScreen extends StatefulWidget {
 
 class _PromoScreenState extends State<PromoScreen> {
   late PromoCubit _promoCubit;
-  List<NotificationModel> _promoList = [];
+  List<NotificationModel> _hottestList = [];
+  List<NotificationModel> _recommendationList = [];
   @override
   void initState() {
     _promoCubit = context.read<PromoCubit>();
-    _promoCubit.getPromoPageInitialData();
+    _promoCubit.getPromoInitialData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text(UiString.stringAsset.kPromo)),
-      ),
-      body: BlocBuilder<PromoCubit, PromoState>(
-        builder: (context, state) {
-          if (state is OnGetPromoPageInitialData) {
-            _promoList = state.promoList;
-          }
-          return state is PromoLoadingState
-              ? const Center(child: CircularProgressIndicator())
-              : CustomScrollView(
-                  slivers: [
-                    SliverList.builder(
-                        itemCount: _promoList.length,
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return _promoItem(index, context);
-                          }
-                          if (_promoList[index].promoType !=
-                              _promoList[index - 1].promoType) {
-                            return _promoItem(index, context);
-                          }
-                          return NotificationCard(
-                            notificationItem: _promoList[index],
-                          );
-                        })
-                  ],
-                );
-        },
-      ),
+        appBar: AppBar(
+          title: Center(child: Text(UiString.stringAsset.kPromo)),
+        ),
+        body: CustomScrollView(
+          slivers: [
+            _promoCategoryTitle(context, UiString.stringAsset.kHottest),
+            _buildHottestList(),
+            _promoCategoryTitle(context, UiString.stringAsset.kRecommendation),
+            _buildRecommendationList(),
+          ],
+        ));
+  }
+
+  Widget _buildHottestList() {
+    return BlocBuilder<PromoCubit, PromoState>(
+      builder: (context, state) {
+        if (state is OnGetHottestPromoData) {
+          _hottestList = state.hottestList;
+        }
+        return state is HottestDataLoadingState
+            ? const SliverLoader()
+            : SliverList.builder(
+                itemBuilder: (context, index) =>
+                    NotificationCard(notificationItem: _hottestList[index]),
+                itemCount: _hottestList.length,
+              );
+      },
     );
   }
 
-  Column _promoItem(int index, BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _sectionTitle(index, context),
-        NotificationCard(
-          notificationItem: _promoList[index],
-        )
-      ],
+  Widget _buildRecommendationList() {
+    return BlocBuilder<PromoCubit, PromoState>(
+      builder: (context, state) {
+        if (state is OnGetRecommendationPromoData) {
+          _recommendationList = state.recommendationList;
+        }
+        return state is RecommendationDataLoadingState
+            ? const SliverLoader()
+            : SliverList.builder(
+                itemBuilder: (context, index) => NotificationCard(
+                    notificationItem: _recommendationList[index]),
+                itemCount: _recommendationList.length,
+              );
+      },
     );
   }
 
-  Widget _sectionTitle(int index, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+  SliverToBoxAdapter _promoCategoryTitle(BuildContext context, String title) {
+    return SliverToBoxAdapter(
       child: Text(
-        _promoList[index]
-                .promoType
-                ?.toString()
-                .substringAfterFullStop()
-                .capitalizeFirstLetter() ??
-            '',
+        title,
         style: Theme.of(context).textTheme.labelLarge,
       ),
     );
-  }
-}
-
-extension SubstringAfterFullStop on String {
-  String substringAfterFullStop() {
-    int index = indexOf('.');
-    if (index != -1) {
-      return substring(index + 1).trim();
-    } else {
-      return '';
-    }
-  }
-}
-
-extension CapitalizeFirstLetter on String {
-  String capitalizeFirstLetter() {
-    if (isEmpty) {
-      return this;
-    }
-    return this[0].toUpperCase() + substring(1);
   }
 }

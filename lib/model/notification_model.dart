@@ -1,8 +1,7 @@
+import 'package:reservation_app/model/enums.dart';
 import 'package:reservation_app/strings/ui_string.dart';
 
-enum NotificationType { all, info, transaction, promo }
 
-enum PromoType { hottest, recommendation }
 
 class NotificationModel {
   final String title;

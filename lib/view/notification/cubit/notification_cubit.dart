@@ -9,7 +9,9 @@ part 'notification_state.dart';
 class NotificationCubit extends Cubit<NotificationState> {
   List<NotificationModel> _notificationList = [];
   List<NotificationCategory> _notificationTypeList = [];
+  int _selectedItem = 0;
   NotificationCubit() : super(NotificationInitial());
+  
   void notificationScreenInitialData() async {
     emit(NotificationLoadingState());
     await Future.delayed(const Duration(seconds: 3));
@@ -20,10 +22,15 @@ class NotificationCubit extends Cubit<NotificationState> {
         notificationTypeList: _notificationTypeList));
   }
 
-  void getFilteredNotification(int index) {
+  void getFilteredNotification(int index) async {
+    _selectedItem = index;
+    emit(OnGetSelectedItemState(selectedIndex: _selectedItem));
+    emit(OnGetNotificationFilteredDataLoadingState());
+    await Future.delayed(const Duration(seconds: 3));
     _filtering(index);
     emit(OnGetFilteredNotification(notificationList: _notificationList));
   }
+
 
   List<NotificationModel> _filtering(int index) {
     if (index == 0) {

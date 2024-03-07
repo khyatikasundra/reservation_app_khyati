@@ -31,7 +31,12 @@ class ItemAddRemoveEvent extends DetailEvent {
   const ItemAddRemoveEvent(
       {required this.addOrRemove, required this.menuId, required this.index});
 }
+class LikeUnLikeEvent extends DetailEvent{
+  final bool isLike;
+  const LikeUnLikeEvent({required this.isLike});
 
-class GetReservationStatusEvent extends DetailEvent {}
+}
 
-// class GetMenuTabInitialData extends DetailEvent {}
+
+// class GetReservationStatusEvent extends DetailEvent {}
+

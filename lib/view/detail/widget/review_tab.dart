@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:reservation_app/model/review_model.dart';
 import 'package:reservation_app/view/detail/bloc/detail_bloc.dart';
+import 'package:reservation_app/view/detail/widget/review_card.dart';
+import 'package:reservation_app/widget/material_loader.dart';
 
 class ReviewTab extends StatefulWidget {
   final List<ReviewModel> reviews;
@@ -28,15 +30,13 @@ class _ReviewTabState extends State<ReviewTab>
   Widget build(BuildContext context) {
     super.build(context);
     return widget.detailState is ReviewLoadingState
-        ? const Center(child: CircularProgressIndicator())
+        ? const MaterialLoader()
         : CustomScrollView(
             slivers: [
               SliverList.builder(
                   itemCount: widget.reviews.length,
-                  itemBuilder: (context, index) => ListTile(
-                        title: Text(widget.reviews[index].name),
-                        subtitle: Text(widget.reviews[index].review),
-                      ))
+                  itemBuilder: (context, index) =>
+                      ReviewCard(reviewItem: widget.reviews[index]))
             ],
           );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reservation_app/model/menu_model.dart';
+import 'package:reservation_app/strings/point_size.dart';
 import 'package:reservation_app/strings/ui_string.dart';
 import 'package:reservation_app/view/detail/bloc/detail_bloc.dart';
 
@@ -16,16 +17,26 @@ class MenuCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(PointSize.value8),
       child: Card(
         child: ListTile(
           title: Text(foodItem.menuName),
-          subtitle: Text(foodItem.menuPrice.toString()),
+          subtitle: Text(foodItem.menuPrice.toStringAsFixed(2)),
           trailing: _addQuantity(context),
         ),
       ),
     );
   }
+
+//! Function
+  void _addRemove(bool isSelected) {
+    return detailBloc.add(ItemAddRemoveEvent(
+      index: index,
+      addOrRemove: isSelected,
+      menuId: foodItem.id,
+    ));
+  }
+//! Widget Method
 
   Widget _addQuantity(BuildContext context) {
     return foodItem.count == 0 ? _countAtZeroAddButton(context) : _counter();
@@ -55,13 +66,5 @@ class MenuCard extends StatelessWidget {
             onPressed: () => _addRemove(true), icon: const Icon(Icons.add)),
       ],
     );
-  }
-
-  void _addRemove(bool isSelected) {
-    return detailBloc.add(ItemAddRemoveEvent(
-      index: index,
-      addOrRemove: isSelected,
-      menuId: foodItem.id,
-    ));
   }
 }

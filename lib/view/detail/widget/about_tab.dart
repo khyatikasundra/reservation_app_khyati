@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reservation_app/view/detail/bloc/detail_bloc.dart';
+import 'package:reservation_app/widget/material_loader.dart';
 
 class AboutTab extends StatelessWidget {
   final String aboutHotelDescription;
@@ -14,7 +15,7 @@ class AboutTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return state is AboutLoadingState
-        ? const Center(child: CircularProgressIndicator())
+        ? const MaterialLoader()
         : CustomScrollView(
             slivers: [
               SliverToBoxAdapter(

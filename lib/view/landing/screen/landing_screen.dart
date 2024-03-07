@@ -19,7 +19,7 @@ class LandingScreen extends StatelessWidget {
     const ProfilePage(),
   ];
 
-  LandingScreen({Key? key});
+  LandingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reservation_app/model/notification_model.dart';
+import 'package:reservation_app/strings/point_size.dart';
 
 class NotificationCard extends StatelessWidget {
   final NotificationModel notificationItem;
@@ -8,10 +9,10 @@ class NotificationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(PointSize.value8),
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.all(15),
+          padding: EdgeInsets.all(PointSize.value12),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -19,30 +20,42 @@ class NotificationCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Text(notificationItem.category.name.toUpperCase()),
-                      const Text("")
-                    ],
-                  ),
-                  Text(
-                    notificationItem.title,
-                    style: Theme.of(context).textTheme.displayLarge,
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: Text(
-                      notificationItem.description,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                    ),
-                  )
+                  _notificationCategoryTitle(),
+                  _notificationTitle(context),
+                  _notificationDescription(context)
                 ],
               )
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _notificationDescription(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.8,
+      child: Text(
+        notificationItem.description,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 2,
+      ),
+    );
+  }
+
+  Widget _notificationTitle(BuildContext context) {
+    return Text(
+      notificationItem.title,
+      style: Theme.of(context).textTheme.displayLarge,
+    );
+  }
+
+  Widget _notificationCategoryTitle() {
+    return Row(
+      children: [
+        Text(notificationItem.category.name.toUpperCase()),
+        const Text("")
+      ],
     );
   }
 }

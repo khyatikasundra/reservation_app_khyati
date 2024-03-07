@@ -27,39 +27,18 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(UiString.stringAsset.signInScreenAppBarTitle),
-      ),
+      appBar: AppBar(title: Text(UiString.stringAsset.signInScreenAppBarTitle)),
       body: BlocConsumer<SignInBloc, SignInState>(
-        listener: (context, state) async {
+        listener: (context, state) {
           _listener(state, context);
         },
-        builder: (context, state) {
-          return SafeArea(
-              child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _textFieldTitle(UiString.stringAsset.emailString),
-                  _emailTextField(),
-                  _spacer(),
-                  _textFieldTitle(UiString.stringAsset.passwordString),
-                  _passwordTextField(),
-                  _spacer(),
-                  _loginButton(state)
-                ],
-              ),
-            ),
-          ));
-        },
+        builder: (context, state) => _signUpBlocBuilder(state),
       ),
     );
   }
 
-  void _listener(SignInState state, BuildContext context) async {
+  void _listener(SignInState state, BuildContext context)  {
+
     if (state is OnSignUpSuccessfulState) {
       Navigator.pushReplacementNamed(context, LandingScreen.tag);
     }
@@ -70,6 +49,28 @@ class _SignInScreenState extends State<SignInScreen> {
       _signInBloc.add(LoginButtonEvent(
           email: _emailController.text, password: _passwordController.text));
     }
+  }
+
+  Widget _signUpBlocBuilder(SignInState state) {
+    return SafeArea(
+        child: Padding(
+      padding: const EdgeInsets.all(10),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _textFieldTitle(UiString.stringAsset.emailString),
+            _emailTextField(),
+            _spacer(),
+            _textFieldTitle(UiString.stringAsset.passwordString),
+            _passwordTextField(),
+            _spacer(),
+            _loginButton(state)
+          ],
+        ),
+      ),
+    ));
   }
 
   Widget _textFieldTitle(String title) {
@@ -104,10 +105,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Widget _loginButton(SignInState state) => Center(
         child: ElevatedButton(
-            style: ButtonStyle(
-                elevation: MaterialStateProperty.all(5),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)))),
+            style: _loginButtonStyle(),
             onPressed: () {
               _validation();
             },
@@ -118,4 +116,11 @@ class _SignInScreenState extends State<SignInScreen> {
                     style: Theme.of(context).textTheme.displayLarge,
                   )),
       );
+
+  ButtonStyle _loginButtonStyle() {
+    return ButtonStyle(
+        elevation: MaterialStateProperty.all(5),
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))));
+  }
 }

@@ -5,12 +5,14 @@ import 'package:reservation_app/model/about_model.dart';
 import 'package:reservation_app/model/menu_model.dart';
 import 'package:reservation_app/model/rest_model.dart';
 import 'package:reservation_app/model/review_model.dart';
+import 'package:reservation_app/strings/point_size.dart';
 import 'package:reservation_app/strings/ui_string.dart';
 import 'package:reservation_app/view/detail/bloc/detail_bloc.dart';
 import 'package:reservation_app/view/detail/widget/about_tab.dart';
+import 'package:reservation_app/view/detail/widget/custom_bottom_sheet.dart';
 import 'package:reservation_app/view/detail/widget/menu_tab.dart';
 import 'package:reservation_app/view/detail/widget/review_tab.dart';
-import 'package:reservation_app/view/home/cubit/home_cubit.dart';
+import 'package:reservation_app/widget/material_loader.dart';
 
 class DetailScreen extends StatefulWidget {
   final int hotelId;
@@ -25,34 +27,23 @@ class _DetailScreenState extends State<DetailScreen> {
   bool _isAnyMenuItemAdd = false;
   List<FoodMenuModel> _foodList = [];
   List<FoodMenuModel> _beverageList = [];
-  int _totalPrice = 0;
+  double _totalPrice = 0;
   List<ReviewModel> _reviewList = [];
+  bool _isLike = false;
   AboutModel _aboutModel = AboutModel(description: "");
-  RestModel _hotelDetail = RestModel(
-      id: 90,
-      hotelName: "",
-      hotelReservationPrice: 400,
-      location: "",
-      description: "",
-      imageURL: "",
-      hotelAddress: "",
-      rating: 2,
-      about: AboutModel(description: ""),
-      menu: MenuModel(drink: [], food: []),
-      review: [],
-      images: []);
+  late RestModel _hotelDetail;
 
   @override
   void initState() {
     _detailBloc = context.read<DetailBloc>();
     _detailBloc.add(GetDetailPageInitialData(hotelId: widget.hotelId));
+    _hotelDetail = RestModel(
+        id: 90,
+        about: AboutModel(description: ""),
+        menu: MenuModel(drink: [], food: []),
+        review: [],
+        images: []);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _detailBloc.close();
   }
 
   @override
@@ -60,45 +51,37 @@ class _DetailScreenState extends State<DetailScreen> {
     return BlocConsumer<DetailBloc, DetailState>(
       listener: (context, state) => _listener(state),
       builder: (context, state) {
-        if (state is OnGetReviewTabInitialData) {
-          _reviewList = state.reviewList;
-        }
+        _detailBuildersLister(state);
         return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            title: Center(child: Text(UiString.stringAsset.kDetailPlace)),
+          appBar: _detailScreenAppBar(context),
+          body: _detailScreenBody(state),
+          bottomSheet: CustomBottomSheet(
+            isAnyItemAdd: _isAnyMenuItemAdd,
+            totalPrice: _totalPrice,
           ),
-          body: (state is DetailLoadingState)
-              ? SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  child: const Center(child: CircularProgressIndicator()))
-              : SafeArea(
-                  child: DefaultTabController(
-                  length: 3,
-                  child: NestedScrollView(
-                    headerSliverBuilder: (context, isScrolled) =>
-                        [_topWidget(context), _tabBar()],
-                    body: _tabBarView(state),
-                  ),
-                )),
-          bottomSheet: _bottomSheet(context),
         );
       },
     );
   }
 
+  //! Functions
   void _listener(DetailState state) {
     if (state is OnGetMenuTabItemState) {
       _foodList = state.updatedFoodCount;
       _beverageList = state.updatedBeverageCount;
       _isAnyMenuItemAdd = state.isAnyMenuItemSelected;
       _totalPrice = state.totalPrice;
+    }
+    if (state is OnGetDetailPageInitialData) {
+      _hotelDetail = state.hotelDetail;
+      _totalPrice = state.totalPrice;
+      _detailBloc.add(GetAboutTabInitialData());
+    }
+  }
+
+  void _detailBuildersLister(DetailState state) {
+    if (state is OnGetReviewTabInitialData) {
+      _reviewList = state.reviewList;
     }
     if (state is OnGetMenuTabInitialData) {
       _foodList = state.foodList;
@@ -107,11 +90,45 @@ class _DetailScreenState extends State<DetailScreen> {
     if (state is OnGetAboutTabInitialData) {
       _aboutModel = state.aboutHotel;
     }
-    if (state is OnGetDetailPageInitialData) {
-      _hotelDetail = state.hotelDetail;
-      _totalPrice = state.totalPrice;
-      _detailBloc.add(GetAboutTabInitialData());
+    if (state is OnLikeUnLikeState) {
+      _isLike = state.isLike;
     }
+  }
+
+//! Widget Method
+  Widget _detailScreenBody(DetailState state) {
+    return (state is DetailLoadingState)
+        ? const MaterialLoader()
+        : SafeArea(
+            child: DefaultTabController(
+            length: 3,
+            child: NestedScrollView(
+              headerSliverBuilder: (context, isScrolled) =>
+                  [_topWidget(context), _tabBar()],
+              body: _tabBarView(state),
+            ),
+          ));
+  }
+
+  AppBar _detailScreenAppBar(BuildContext context) {
+    return AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+      title: Center(child: Text(UiString.stringAsset.kDetailPlace)),
+      actions: [
+        IconButton(
+            onPressed: () {
+              _detailBloc.add(LikeUnLikeEvent(isLike: _isLike));
+            },
+            icon: _isLike
+                ? const Icon(Icons.favorite)
+                : const Icon(Icons.favorite_outline))
+      ],
+    );
   }
 
   SliverToBoxAdapter _topWidget(BuildContext context) {
@@ -167,7 +184,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   Padding _hotelAddressText(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: EdgeInsets.symmetric(horizontal: PointSize.value16),
       child: Text(
         _hotelDetail.hotelAddress,
         style: Theme.of(context).textTheme.displayMedium,
@@ -177,45 +194,12 @@ class _DetailScreenState extends State<DetailScreen> {
 
   Padding _hotelTitle(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(top: 20, left: 15),
+        padding:
+            EdgeInsets.only(top: PointSize.value20, left: PointSize.value16),
         child: Text(
           _hotelDetail.hotelName,
           style: Theme.of(context).textTheme.labelLarge,
         ));
-  }
-
-  Widget _bottomSheet(BuildContext context) {
-    return BottomSheet(
-      builder: (context) => ColoredBox(
-        color: Colors.amber,
-        child: SizedBox(
-          height: 80,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                    UiString.stringAsset.kIDR + _totalPrice.toStringAsFixed(3)),
-                ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.red),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)))),
-                    onPressed: () {},
-                    child: Text(
-                      _isAnyMenuItemAdd
-                          ? UiString.stringAsset.kOrder
-                          : UiString.stringAsset.kReservation,
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ))
-              ],
-            ),
-          ),
-        ),
-      ),
-      onClosing: () {},
-    );
   }
 
   CarouselSlider _carouselSlider() {
@@ -241,8 +225,8 @@ class _DetailScreenState extends State<DetailScreen> {
               borderRadius: BorderRadius.circular(30),
               child: Image.network(
                 element.imageUrl,
-                height: 200,
-                width: 260,
+                height: PointSize.carouselHeight,
+                width: PointSize.carouselWidth,
                 fit: BoxFit.cover,
               ),
             ))

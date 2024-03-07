@@ -11,7 +11,4 @@ final class SignInInitial extends SignInState {}
 
 class SignInLoader extends SignInState {}
 
-class OnSignUpSuccessfulState extends SignInState {
-  @override
-  List<Object> get props => [];
-}
+class OnSignUpSuccessfulState extends SignInState {}
