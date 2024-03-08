@@ -97,6 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
       itemCount: _popularHotelList.length,
       itemBuilder: (context, index) => PopularSectionCard(
         popularItem: _popularHotelList[index],
+        onPress: () =>
+            _homeCubit.selectedHotelData(hotelId: _popularHotelList[index].id),
       ),
     );
   }
@@ -111,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Padding _profileImage(ProfileState profileState) {
     return Padding(
-      padding:  EdgeInsets.only(right: PointSize.value20),
+      padding: EdgeInsets.only(right: PointSize.value20),
       child: CircleAvatar(
         foregroundImage: profileState is OnGetProfilePageInitialData
             ? NetworkImage(profileState.profileImageUrl)
